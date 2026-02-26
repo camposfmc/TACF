@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TACF · NSCA 54-3 · Comando da Aeronáutica</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0A1628; --navy-mid: #0F2040; --navy-light: #1A3460;
+    --sky: #1565C0; --sky-bright: #1E88E5; --ice: #E3F2FD;
+    --gold: #F9A825; --gold-light: #FFD54F;
+    --red: #C62828; --green: #1B5E20; --green-bright: #2E7D32;
+    --white: #FFFFFF; --fog: #F0F4F8; --mist: #B0BEC5;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    min-height: 100vh;
+    color: var(--white);
+    overflow-x: hidden;
+  }
+
+  /* ── HERO HEADER ── */
+  .hero {
+    position: relative;
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 50%, #0D1F3C 100%);
+    padding: 48px 24px 40px;
+    text-align: center;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(21,101,192,0.25) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(21,101,192,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(21,101,192,0.06) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(21,101,192,0.2); border: 1px solid rgba(30,136,229,0.4);
+    border-radius: 100px; padding: 6px 16px; font-size: 11px; font-weight: 500;
+    letter-spacing: 2px; text-transform: uppercase; color: #90CAF9; margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif; font-size: clamp(52px, 10vw, 96px);
+    letter-spacing: 6px; line-height: 0.9;
+    background: linear-gradient(135deg, var(--white) 0%, #90CAF9 50%, var(--gold-light) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 10px;
+  }
+  .hero-sub { font-size: 13px; letter-spacing: 3px; text-transform: uppercase; color: var(--mist); font-weight: 300; margin-bottom: 8px; }
+  .hero-norm { font-family: 'DM Mono', monospace; font-size: 11px; color: rgba(144,202,249,0.6); letter-spacing: 1px; }
+
+  /* ── MAIN LAYOUT ── */
+  .app { max-width: 900px; margin: 0 auto; padding: 32px 20px 64px; }
+
+  /* ── CARDS ── */
+  .card {
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 16px; padding: 28px; margin-bottom: 16px;
+    backdrop-filter: blur(4px); transition: border-color 0.3s;
+  }
+  .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .card-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--sky) 0%, var(--sky-bright) 100%);
+    display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;
+  }
+  .card-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; color: var(--white); }
+  .card-desc { font-size: 12px; color: var(--mist); font-weight: 300; letter-spacing: 0.5px; }
+
+  /* ── FORM ── */
+  .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; }
+  .form-group { display: flex; flex-direction: column; gap: 8px; }
+  .form-group label { font-size: 11px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: #90CAF9; }
+  select, input[type="number"] {
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px; padding: 12px 14px; font-family: 'DM Sans', sans-serif;
+    font-size: 15px; color: var(--white); width: 100%; transition: all 0.25s; outline: none;
+  }
+  select option { background: var(--navy-mid); color: var(--white); }
+  input:focus, select:focus { border-color: var(--sky-bright); background: rgba(21,101,192,0.12); box-shadow: 0 0 0 3px rgba(30,136,229,0.15); }
+  input::placeholder { color: rgba(255,255,255,0.25); }
+
+  /* ── BOTÕES ── */
+  .aerobic-toggle { display: flex; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 4px; gap: 4px; margin-bottom: 16px; }
+  .toggle-btn { flex: 1; padding: 10px 12px; border: none; border-radius: 7px; background: transparent; color: var(--mist); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.25s; }
+  .toggle-btn.active { background: var(--sky); color: var(--white); box-shadow: 0 2px 8px rgba(21,101,192,0.4); }
+
+  .btn-calc {
+    width: 100%; padding: 18px; border: none; border-radius: 12px;
+    background: linear-gradient(135deg, var(--sky) 0%, #0D47A1 100%); color: var(--white);
+    font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 4px; cursor: pointer;
+    transition: all 0.3s; margin-top: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  }
+  .btn-calc:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(21,101,192,0.5); }
+  
+  .btn-reset {
+    width: 100%; padding: 14px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 13px;
+    text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; border: 1px solid rgba(255,255,255,0.1);
+    background: transparent; color: var(--mist); margin-top: 16px;
+  }
+  .btn-reset:hover { background: rgba(255,255,255,0.05); color: white; }
+
+  /* ── ALERTA DE ERRO ── */
+  .alert {
+    background: rgba(249,168,37,0.1); border: 1px solid rgba(249,168,37,0.3); border-radius: 10px;
+    padding: 14px 18px; font-size: 13px; color: var(--gold-light); margin-top: 16px; display: none; text-align: center;
+  }
+  .alert.show { display: block; }
+
+  /* ── METAS TABLE ── */
+  .table-responsive { overflow-x: auto; }
+  .metas-table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: center; }
+  .metas-table th, .metas-table td { padding: 12px 8px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .metas-table th { font-weight: bold; letter-spacing: 1px; font-size: 11px; text-transform: uppercase; }
+  .metas-table td.oic-label { text-align: left; font-weight: 500; color: var(--mist); }
+  .val-meta { font-family: 'DM Mono', monospace; font-weight: 500; }
+  .c-s { color: var(--gold-light); } .c-b { color: #AED581; } .c-mb { color: #81C784; } .c-e { color: #64B5F6; } .c-max { color: #E1BEE7; }
+
+  /* ── RESULTADOS ── */
+  #resultado { display: none; }
+  .result-header { text-align: center; padding: 20px 0; }
+  .grade-number { font-family: 'Bebas Neue', sans-serif; font-size: 56px; color: var(--gold-light); }
+  .badge-apt { padding: 12px; border-radius: 10px; font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 2px; text-align: center; margin-bottom: 10px; }
+  .apt-apto { background: rgba(46,125,50,0.3); border: 1px solid rgba(76,175,80,0.5); color: #A5D6A7; }
+  .apt-inapto { background: rgba(198,40,40,0.3); border: 1px solid rgba(244,67,54,0.5); color: #FFCDD2; }
+  
+  .max-score-msg {
+    display: none; background: linear-gradient(135deg, #FFD54F 0%, #F9A825 100%);
+    color: #0A1628; font-weight: bold; font-size: 16px; padding: 16px; border-radius: 10px;
+    margin-bottom: 20px; text-align: center; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(249,168,37,0.4);
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
+  .oic-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 20px; }
+  .oic-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px; text-align: center; }
+  .oic-name { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--mist); margin-bottom: 6px; }
+  .oic-value { font-family: 'DM Mono', monospace; font-size: 22px; font-weight: 500; margin-bottom: 4px; }
+  .oic-pts { font-size: 11px; color: var(--mist); }
+
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-badge">Comando da Aeronáutica</div>
+  <h1>TACF</h1>
+  <p class="hero-sub">Teste de Avaliação do Condicionamento Físico</p>
+  <p class="hero-norm">NSCA 54-3 · CDA · 2024/2026</p>
+</div>
+
+<div class="app">
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">👤</div>
+      <div>
+        <div class="card-title">Identificação</div>
+        <div class="card-desc">Insira seus dados para gerar as metas automáticas</div>
+      </div>
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Sexo</label>
+        <select id="sexo" onchange="atualizarMetas()">
+          <option value="M">Masculino</option>
+          <option value="F">Feminino</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Idade (anos)</label>
+        <input type="number" id="idade" placeholder="Ex: 28" min="18" max="70" oninput="atualizarMetas()">
+      </div>
+      <div class="form-group">
+        <label>Estatura (cm)</label>
+        <input type="number" id="estatura" placeholder="Ex: 175" min="150" max="220" oninput="atualizarMetas()">
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="card-metas" style="display: none;">
+    <div class="card-header">
+      <div class="card-icon">🎯</div>
+      <div>
+        <div class="card-title">Suas Metas de Treinamento</div>
+        <div class="card-desc">Índices mínimos para atingir cada menção de acordo com seu perfil</div>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="metas-table">
+        <thead>
+          <tr>
+            <th>Prova</th>
+            <th class="c-s">Satisfatório</th>
+            <th class="c-b">Bom</th>
+            <th class="c-mb">Muito Bom</th>
+            <th class="c-e">Excelente</th>
+            <th class="c-max">Máximo</th>
+          </tr>
+        </thead>
+        <tbody id="metas-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-icon">📏</div><div><div class="card-title">OIC 01/05 · Cintura</div></div></div>
+    <input type="number" id="cintura" step="0.5" placeholder="Sua medida em cm (Ex: 85.5)">
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-icon">💪</div><div><div class="card-title" id="t-flex">OIC 02/06 · Flexão</div><div class="card-desc" id="d-flex">Repetições sem pausa</div></div></div>
+    <input type="number" id="flexao" placeholder="Nº de repetições">
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-icon">🔄</div><div><div class="card-title">OIC 03/07 · Abdominal</div><div class="card-desc">Repetições em 1 minuto</div></div></div>
+    <input type="number" id="abdominal" placeholder="Nº de repetições em 1 min">
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-icon">🏃</div><div><div class="card-title">OIC 04/08 · Aeróbico</div><div class="card-desc">Escolha a prova realizada</div></div></div>
+    <div class="aerobic-toggle">
+      <button class="toggle-btn active" id="btn-corrida" onclick="setAerobico('corrida')">🏃 Corrida 12 min</button>
+      <button class="toggle-btn" id="btn-marcha" onclick="setAerobico('marcha')">🚶 Marcha 4.8 km</button>
+    </div>
+    <div id="input-corrida">
+      <input type="number" id="corrida_m" placeholder="Distância percorrida em metros (Ex: 2400)">
+    </div>
+    <div id="input-marcha" class="form-grid" style="display:none;">
+      <input type="number" id="marcha_min" placeholder="Minutos (Ex: 42)">
+      <input type="number" id="marcha_seg" placeholder="Segundos (Ex: 30)">
+    </div>
+  </div>
+
+  <div id="alert-err" class="alert">⚠️ Preencha todos os campos antes de calcular o resultado final.</div>
+
+  <button class="btn-calc" onclick="calcular()">CALCULAR RESULTADO FINAL</button>
+
+  <div id="resultado">
+    <div class="card" style="margin-top: 24px;" id="card-resultado">
+      <div class="card-header">
+        <div class="card-icon">📊</div>
+        <div><div class="card-title">Resultado Final</div><div class="card-desc" id="res-info"></div></div>
+      </div>
+      
+      <div id="msg-max-score" class="max-score-msg">
+        🏆 PARABÉNS VOCÊ É NOTA MÁXIMA, INCRÍVEL!! 🏆
+      </div>
+
+      <div class="result-header">
+        <div class="badge-apt" id="res-apt">—</div>
+        <div>Grau Final: <span class="grade-number" id="res-grau">0</span> pontos</div>
+        <div style="font-size: 18px; margin-top: 10px; font-weight: bold;" id="res-conceito"></div>
+      </div>
+      
+      <div class="oic-grid" id="oic-breakdown"></div>
+      
+      <button class="btn-reset" onclick="resetarFormulario()">🔄 Limpar Tudo e Reiniciar</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   BANCO DE DADOS NSCA 54-3 (STRINGS COMPACTADAS)
+   ═══════════════════════════════════════════════════════ */
+
+const CSV_CINTURA_M = `99,0,0,0,0,0,0|98.5,6,6,6,6,6,6|98,6.4,6.4,6.5,6.5,6.7,6.9|97.5,6.7,6.8,6.9,7.1,7.3,7.7|97,7.1,7.2,7.4,7.6,8,8.6|96.5,7.4,7.6,7.8,8.2,8.7,9.4|96,7.8,8,8.3,8.7,9.3,10.3|95.5,8.1,8.4,8.8,9.3,10,11.1|95,8.5,8.8,9.2,9.8,10.7,12|94.5,8.8,9.2,9.7,10.4,11.3,13.3|94,9.2,9.6,10.2,10.9,12,14.6|93.5,9.5,10,10.6,11.5,13,15.9|93,9.9,10.4,11.1,12,14,17.1|92.5,10.2,10.8,11.5,13.3,15,18.4|92,10.6,11.2,12,14.6,16,19.7|91.5,10.9,11.6,13.3,15.9,17,21|91,11.3,12,14.6,17.1,18,22.5|90.5,11.6,13.3,15.9,18.4,19,24|90,12,14.6,17.1,19.7,20,25.5|89.5,13.3,15.9,18.4,21,21,27|89,14.6,17.1,19.7,22.5,23,27.8|88.5,15.9,18.4,21,24,25,28.2|88,17.1,19.7,22.5,25.5,27,28.6|87.5,18.4,21,24,27,27.8,30|87,19.7,22.5,25.5,27.8,28.2,30|86.5,21,24,27,28.2,28.6,30|86,22.5,25.5,27.8,28.6,30,30|85.5,24,27,28.2,30,30,30|85,25.5,27.8,28.6,30,30,30|84.5,27,28.2,30,30,30,30|84,27.8,28.6,30,30,30,30|83.5,28.2,30,30,30,30,30|83,28.6,30,30,30,30,30|82.5,30,30,30,30,30,30`;
+const CSV_CINTURA_F = `90,0,0,0|89.5,6,6,6|89,6.7,6.7,7.2|88.5,7.3,7.3,8.4|88,8,8,9.6|87.5,8.7,8.7,10.8|87,9.3,9.3,12|86.5,10,10,14.3|86,10.7,10.7,15.8|85.5,11.3,11.3,17.3|85,12,12,21|84.5,13.5,16.5,23|84,15,21,25|83.5,16.5,23,27|83,18,25,27.8|82.5,19.5,27,28.2|82,21,27.8,28.6|81.5,23,28.2,30|81,25,28.6,30|80.5,27,30,30|80,27.8,30,30|79.5,28.2,30,30|79,28.6,30,30|78.5,30,30,30`;
+const CSV_FLEXAO_M = `9,0,0,0,0,0,0,0,0,0|11,0,0,0,0,0,0,0,0,2|12,0,0,0,0,0,0,0,2,2.3|13,0,0,0,0,0,0,2,2.3,2.7|14,0,0,0,0,0,2,2.3,2.7,3|15,0,0,0,0,2,2.3,2.7,3,3.3|16,0,0,0,0,2.2,2.7,3,3.3,3.7|17,0,0,0,2,2.4,3,3.3,3.7,4|18,0,0,0,2.3,2.6,3.3,3.7,4,4.6|19,0,0,0,2.5,2.8,3.7,4,4.4,5.2|20,0,0,2,2.8,3,4,4.5,4.9,5.8|21,0,0,2.2,3,3.2,4.3,5,5.3,6.4|22,0,2,2.4,3.3,3.4,4.7,5.5,5.7,7|23,0,2.2,2.7,3.5,3.6,5,6,6.1,7.3|24,0,2.4,2.9,3.8,3.8,5.3,6.5,6.6,7.6|25,2,2.7,3.1,4,4,5.7,7,7,7.9|26,2.2,2.9,3.3,4.3,4.3,6,7.2,7.4,8.1|27,2.4,3.1,3.6,4.5,4.6,6.3,7.4,7.8,8.4|28,2.7,3.3,3.8,4.8,4.9,6.7,7.5,8.2,8.7|29,2.9,3.6,4,5,5.2,7,7.7,8.6,9|30,3.1,3.8,4.3,5.3,5.5,7.2,7.9,9,9.5|31,3.3,4,4.6,5.5,5.8,7.4,8.1,9.3,10|32,3.6,4.3,4.9,5.8,6.1,7.7,8.3,9.7,10|33,3.8,4.5,5.2,6,6.4,7.9,8.5,10,10|34,4,4.8,5.5,6.3,6.7,8.1,8.6,10,10|35,4.3,5.1,5.8,6.5,7,8.3,8.8,10,10|36,4.5,5.4,6.1,6.8,7.3,8.6,9,10,10|37,4.8,5.6,6.4,7,7.7,8.8,9.3,10,10|38,5.1,5.9,6.7,7.3,8,9,9.7,10,10|39,5.4,6.2,7,7.7,8.3,9.3,10,10,10|40,5.6,6.5,7.3,8,8.7,9.7,10,10,10|41,5.9,6.7,7.6,8.3,9,10,10,10,10|42,6.2,7,7.9,8.7,9.3,10,10,10,10|43,6.5,7.2,8.1,9,9.7,10,10,10,10|44,6.7,7.4,8.4,9.3,10,10,10,10,10|45,7,7.5,8.7,9.7,10,10,10,10,10|46,7.2,7.7,9,10,10,10,10,10,10|47,7.4,7.9,9.3,10,10,10,10,10,10|48,7.6,8.1,9.5,10,10,10,10,10,10|49,7.8,8.3,9.8,10,10,10,10,10,10|50,8,8.5,10,10,10,10,10,10,10|51,8.2,8.6,10,10,10,10,10,10,10|52,8.4,8.8,10,10,10,10,10,10,10|53,8.6,9,10,10,10,10,10,10,10|54,8.8,9.2,10,10,10,10,10,10,10|55,9,9.4,10,10,10,10,10,10,10|56,9.2,9.6,10,10,10,10,10,10,10|57,9.4,9.8,10,10,10,10,10,10,10|58,9.6,10,10,10,10,10,10,10,10|59,9.8,10,10,10,10,10,10,10,10|60,10,10,10,10,10,10,10,10,10`;
+const CSV_FLEXAO_F = `5,0,0,0,0,0,0,0,0|6,0,0,0,0,0,0,0,2|7,0,0,0,0,0,0,2,4|8,0,0,0,0,0,2,4,4.8|9,0,0,0,0,2,4,4.6,5.6|10,0,0,0,2,4,4.6,5.2,6.3|11,2,0,2,4,4.6,5.2,5.8,7|12,4,2,4,4.6,5.2,5.8,6.4,7.7|13,4.6,4,4.6,5.2,5.8,6.4,7,8.4|14,5.2,4.5,5.2,5.8,6.4,7,7.7,9|15,5.8,5,5.8,6.4,7,7.7,8.4,9.4|16,6.4,5.5,6.4,7,7.7,8.4,9,9.7|17,7,6,7,7.7,8.4,9,9.3,10|18,7.7,6.5,7.7,8.4,9,9.3,9.5,10|19,8.4,7,8.4,9,9.3,9.5,9.8,10|20,9,7.7,9,9.3,9.5,9.8,10,10|21,9.3,8.4,9.3,9.5,9.8,10,10,10|22,9.5,9,9.5,9.8,10,10,10,10|23,9.8,9.3,9.8,10,10,10,10,10|24,10,10,10,10,10,10,10,10`;
+const CSV_ABDOMINAL_M = `19,0,0,0,0,0,0,0,0,0|20,0,0,0,0,0,0,0,0,2|21,0,0,0,0,0,0,0,0,2.3|22,0,0,0,0,0,0,0,2,2.6|23,0,0,0,0,0,0,0,2.3,2.9|24,0,0,0,0,0,0,0,2.5,3.1|25,0,0,0,0,0,0,2,2.8,3.4|26,0,0,0,0,0,0,2.3,3,3.7|27,0,0,0,0,0,2,2.7,3.3,4|28,0,0,0,0,0,2.2,3,3.5,4.4|29,0,0,0,0,0,2.4,3.3,3.8,4.8|30,0,0,0,0,2,2.7,3.7,4,5.1|31,0,0,0,2,2.2,2.9,4,4.4,5.5|32,0,0,2,2.2,2.4,3.1,4.3,4.8,5.9|33,0,0,2.2,2.4,2.7,3.3,4.7,5.1,6.3|34,0,0,2.4,2.7,2.9,3.6,5,5.5,6.6|35,0,2,2.6,2.9,3.1,3.8,5.3,5.9,7|36,0,2.2,2.8,3.1,3.3,4,5.7,6.3,7.4|37,2,2.4,3,3.3,3.6,4.3,6,6.6,7.8|38,2.3,2.6,3.2,3.6,3.8,4.6,6.3,7,8.2|39,2.5,2.8,3.4,3.8,4,4.9,6.7,7.2,8.6|40,2.8,3,3.6,4,4.3,5.2,7,7.4,9|41,3,3.2,3.8,4.3,4.7,5.5,7.2,7.6,9.3|42,3.3,3.4,4,4.6,5,5.8,7.4,7.8,9.7|43,3.5,3.6,4.4,4.9,5.3,6.1,7.6,8,10|44,3.8,3.8,4.8,5.2,5.7,6.4,7.8,8.2,10|45,4,4,5.1,5.5,6,6.7,8,8.4,10|46,4.3,4.4,5.5,5.8,6.3,7,8.2,8.6,10|47,4.6,4.8,5.9,6.1,6.7,7.3,8.4,8.8,10|48,4.9,5.1,6.3,6.4,7,7.6,8.6,9,10|49,5.2,5.5,6.6,6.7,7.3,7.9,8.8,9.3,10|50,5.5,5.9,7,7,7.6,8.1,9,9.7,10|51,5.8,6.3,7.3,7.3,7.9,8.4,9.3,10,10|52,6.1,6.6,7.5,7.7,8.1,8.7,9.7,10,10|53,6.4,7,7.8,8,8.4,9,10,10,10|54,6.7,7.3,8,8.3,8.7,9.3,10,10,10|55,7,7.5,8.3,8.7,9,9.7,10,10,10|56,7.3,7.8,8.5,9,9.3,10,10,10,10|57,7.6,8,8.8,9.3,9.7,10,10,10,10|58,7.9,8.3,9,9.5,10,10,10,10,10|59,8.1,8.5,9.3,9.8,10,10,10,10,10|60,8.4,8.8,9.5,10,10,10,10,10,10|61,8.7,9,9.8,10,10,10,10,10,10|62,9,9.3,10,10,10,10,10,10,10|63,9.3,9.5,10,10,10,10,10,10,10|64,9.5,9.8,10,10,10,10,10,10,10|65,9.8,10,10,10,10,10,10,10,10|66,10,10,10,10,10,10,10,10,10`;
+const CSV_ABDOMINAL_F = `10,0,0,0,0,0,0,0,0,0,0|11,0,0,0,0,0,0,0,0,0,2|12,0,0,0,0,0,0,0,0,2,2.3|13,0,0,0,0,0,0,0,0,2.3,2.6|14,0,0,0,0,0,0,0,0,2.5,2.9|15,0,0,0,0,0,0,0,2,2.8,3.1|16,0,0,0,0,0,0,0,2.3,3,3.4|17,0,0,0,0,0,0,2,2.6,3.3,3.7|18,0,0,0,0,0,0,2.2,2.9,3.5,4|19,0,0,0,0,0,0,2.4,3.1,3.8,4.4|20,0,0,0,0,0,2,2.7,3.4,4,4.9|21,0,0,0,0,2,2.2,2.9,3.7,4.3,5.3|22,0,0,0,0,2.2,2.4,3.1,4,4.7,5.7|23,0,0,0,0,2.4,2.6,3.3,4.4,5,6.1|24,0,0,0,0,2.5,2.8,3.6,4.8,5.3,6.6|25,0,0,0,2,2.7,3,3.8,5.1,5.7,7|26,0,0,0,2.2,2.9,3.2,4,5.5,6,7.4|27,0,0,2,2.4,3.1,3.4,4.2,5.9,6.3,7.8|28,0,0,2.2,2.6,3.3,3.6,4.5,6.3,6.7,8.2|29,0,2,2.4,2.8,3.5,3.8,4.7,6.6,7,8.6|30,2,2.2,2.6,3,3.6,4,4.9,7,7.2,9|31,2.2,2.4,2.8,3.2,3.8,4.3,5.2,7.2,7.4,9.5|32,2.4,2.6,3,3.4,4,4.6,5.4,7.3,7.5,10|33,2.6,2.8,3.2,3.6,4.3,4.9,5.6,7.5,7.7,10|34,2.8,3,3.4,3.8,4.6,5.2,5.8,7.7,7.9,10|35,3,3.2,3.6,4,4.9,5.5,6.1,7.8,8.1,10|36,3.2,3.4,3.8,4.3,5.2,5.8,6.3,8,8.3,10|37,3.4,3.6,4,4.6,5.5,6.1,6.5,8.2,8.5,10|38,3.6,3.8,4.3,4.9,5.8,6.4,6.8,8.3,8.6,10|39,3.8,4,4.6,5.2,6.1,6.7,7,8.5,8.8,10|40,4,4.3,4.9,5.5,6.4,7,7.3,8.7,9,10|41,4.3,4.7,5.2,5.8,6.7,7.2,7.6,8.8,9.5,10|42,4.6,5,5.5,6.1,7,7.4,7.9,9,10,10|43,4.9,5.3,5.8,6.4,7.3,7.7,8.1,9.5,10,10|44,5.2,5.7,6.1,6.7,7.5,7.9,8.4,10,10,10|45,5.5,6,6.4,7,7.8,8.1,8.7,10,10,10|46,5.8,6.3,6.7,7.3,8,8.3,9,10,10,10|47,6.1,6.7,7,7.5,8.3,8.6,9.3,10,10,10|48,6.4,7,7.3,7.8,8.5,8.8,9.7,10,10,10|49,6.7,7.3,7.5,8,8.8,9,10,10,10,10|50,7,7.5,7.8,8.3,9,9.3,10,10,10,10|51,7.3,7.8,8,8.5,9.3,9.7,10,10,10,10|52,7.5,8,8.3,8.8,9.7,10,10,10,10,10|53,7.8,8.3,8.5,9,10,10,10,10,10,10|54,8,8.5,8.8,9.3,10,10,10,10,10,10|55,8.3,8.8,9,9.5,10,10,10,10,10,10|56,8.5,9,9.3,9.8,10,10,10,10,10,10|57,8.8,9.3,9.7,10,10,10,10,10,10,10|58,9,9.7,10,10,10,10,10,10,10,10|59,9.3,10,10,10,10,10,10,10,10,10|60,9.5,10,10,10,10,10,10,10,10,10|61,9.8,10,10,10,10,10,10,10,10,10|62,10,10,10,10,10,10,10,10,10,10`;
+const CSV_CORRIDA_M = `1880,0,0,0,0,0,0,0,0|1890,0,0,0,0,0,0,0,10|1900,0,0,0,0,0,0,0,10.6|1910,0,0,0,0,0,0,10,11.3|1920,0,0,0,0,0,0,10.6,11.9|1930,0,0,0,0,0,0,11.2,12.5|1940,0,0,0,0,0,0,11.8,13.1|1950,0,0,0,0,0,0,12.4,13.8|1960,0,0,0,0,0,10,12.9,14.4|1970,0,0,0,0,0,10.7,13.5,15|1980,0,0,0,0,0,11.4,14.1,15.6|1990,0,0,0,0,0,12.1,14.7,16.3|2000,0,0,0,0,10,12.9,15.3,16.9|2010,0,0,0,10,10.5,13.6,15.9,17.5|2020,0,0,0,10.4,10.9,14.3,16.5,18.1|2030,0,0,0,10.8,11.4,15,17.1,18.8|2040,0,0,0,11.3,11.8,15.7,17.6,19.4|2050,0,0,10,11.7,12.3,16.4,18.2,20|2060,0,0,10.4,12.1,12.7,17.1,18.8,20.7|2070,0,0,10.8,12.5,13.2,17.9,19.4,21.4|2080,0,10,11.2,12.9,13.6,18.6,20,22|2090,0,10.4,11.6,13.3,14.1,19.3,20.7,22.7|2100,0,10.7,12,13.8,14.5,20,21.4,23.4|2110,0,11.1,12.4,14.2,15,20.6,22,24.1|2120,0,11.5,12.8,14.6,15.5,21.2,22.7,24.8|2130,10,11.9,13.2,15,15.9,21.8,23.4,25.5|2140,10.4,12.2,13.6,15.4,16.4,22.4,24.1,26.1|2150,10.7,12.6,14,15.8,16.8,23,24.8,26.8|2160,11.1,13.0,14.4,16.3,17.3,23.6,25.5,27.5|2170,11.4,13.3,14.8,16.7,17.7,24.2,26.1,28.2|2180,11.8,13.7,15.2,17.1,18.2,24.8,26.8,28.9|2190,12.1,14.1,15.6,17.5,18.6,25.4,27.5,29.5|2200,12.5,14.4,16.0,17.9,19.1,26.0,28.2,30.2|2210,12.9,14.8,16.4,18.3,19.5,26.6,28.9,30.9|2220,13.2,15.2,16.8,18.8,20.0,27.2,29.5,31.6|2230,13.6,15.6,17.2,19.2,20.8,27.8,30.2,32.3|2240,13.9,15.9,17.6,19.6,21.7,28.4,30.9,33.0|2250,14.3,16.3,18.0,20.0,22.5,29.0,31.6,33.6|2260,14.6,16.7,18.4,20.5,23.3,29.6,32.3,34.3|2270,15.0,17.0,18.8,21.0,24.2,30.2,33.0,35.0|2280,15.4,17.4,19.2,21.5,25.0,30.8,33.6,35.6|2290,15.7,17.8,19.6,22.0,25.8,31.4,34.3,36.2|2300,16.1,18.1,20.0,22.5,26.7,32.0,35.0,36.8|2310,16.4,18.5,20.5,23.0,27.5,32.6,35.3,37.4|2320,16.8,18.9,21.0,23.5,28.3,33.2,35.6,37.9|2330,17.1,19.3,21.5,24.0,29.2,33.8,36.0,38.5|2340,17.5,19.6,22.0,24.5,30.0,34.4,36.3,39.1|2350,17.9,20.0,22.5,25.0,30.8,35.0,36.6,39.7|2360,18.2,20.6,23.0,25.5,31.7,35.3,36.9,40.3|2370,18.6,21.1,23.5,26.0,32.5,35.6,37.3,40.9|2380,18.9,21.7,24.0,26.5,33.3,36.0,37.6,41.5|2390,19.3,22.2,24.5,27.0,34.2,36.3,37.9,42.1|2400,19.6,22.8,25.0,27.5,35.0,36.6,38.2,42.6|2410,20.0,23.3,25.5,28.0,35.3,36.9,38.5,43.2|2420,20.5,23.9,26.0,28.5,35.7,37.3,38.9,43.8|2430,21.0,24.4,26.5,29.0,36.0,37.6,39.2,44.4|2440,21.6,25.0,27.0,29.5,36.3,37.9,39.5,45.0|2450,22.1,25.6,27.5,30.0,36.7,38.2,39.8,46.3|2460,22.6,26.1,28.0,30.5,37.0,38.5,40.2,47.5|2470,23.1,26.7,28.5,31.0,37.3,38.9,40.5,48.8|2480,23.6,27.2,29.0,31.5,37.7,39.2,40.8,50.0|2490,24.1,27.8,29.5,32.0,38.0,39.5,41.1,50.0|2500,24.7,28.3,30.0,32.5,38.3,39.8,41.5,50.0|2510,25.2,28.9,30.5,33.0,38.7,40.2,41.8,50.0|2520,25.7,29.4,31.0,33.5,39.0,40.5,42.1,50.0|2530,26.2,30.0,31.5,34.0,39.3,40.8,42.4,50.0|2540,26.7,30.6,32.0,34.5,39.7,41.1,42.7,50.0|2550,27.2,31.1,32.5,35.0,40.0,41.5,43.1,50.0|2560,27.8,31.7,33.0,35.4,40.3,41.8,43.4,50.0|2570,28.3,32.2,33.5,35.8,40.7,42.1,43.7,50.0|2580,28.8,32.8,34.0,36.3,41.0,42.4,44.0,50.0|2590,29.3,33.3,34.5,36.7,41.3,42.7,44.4,50.0|2600,29.8,33.9,35.0,37.1,41.7,43.1,44.7,50.0|2610,30.3,34.4,35.5,37.5,42.0,43.4,45.0,50.0|2620,30.9,35.0,36.0,37.9,42.3,43.7,46.0,50.0|2630,31.4,35.5,36.4,38.3,42.7,44.0,47.0,50.0|2640,31.9,36.0,36.9,38.8,43.0,44.4,48.0,50.0|2650,32.4,36.4,37.4,39.2,43.3,44.7,49.0,50.0|2660,32.9,36.9,37.9,39.6,43.7,45.0,50.0,50.0|2670,33.4,37.4,38.3,40.0,44.0,46.3,50.0,50.0|2680,34.0,37.9,38.8,40.4,44.3,47.5,50.0,50.0|2690,34.5,38.3,39.3,40.8,44.7,48.8,50.0,50.0|2700,35.0,38.8,39.8,41.3,45.0,50.0,50.0,50.0|2710,35.4,39.3,40.2,41.7,46.0,50.0,50.0,50.0|2720,35.8,39.8,40.7,42.1,47.0,50.0,50.0,50.0|2730,36.2,40.2,41.2,42.5,48.0,50.0,50.0,50.0|2740,36.5,40.7,41.7,42.9,49.0,50.0,50.0,50.0|2750,36.9,41.2,42.1,43.3,50.0,50.0,50.0,50.0|2760,37.3,41.7,42.6,43.8,50.0,50.0,50.0,50.0|2770,37.7,42.1,43.1,44.2,50.0,50.0,50.0,50.0|2780,38.1,42.6,43.6,44.6,50.0,50.0,50.0,50.0|2790,38.5,43.1,44.0,45.0,50.0,50.0,50.0,50.0|2800,38.8,43.6,44.5,46.0,50.0,50.0,50.0,50.0|2810,39.2,44.0,45.0,47.0,50.0,50.0,50.0,50.0|2820,39.6,44.5,46.0,48.0,50.0,50.0,50.0,50.0|2830,40.0,45.0,47.0,49.0,50.0,50.0,50.0,50.0|2840,40.4,45.7,48.0,50.0,50.0,50.0,50.0,50.0|2850,40.8,46.4,49.0,50.0,50.0,50.0,50.0,50.0|2860,41.2,47.1,50.0,50.0,50.0,50.0,50.0,50.0|2870,41.5,47.9,50.0,50.0,50.0,50.0,50.0,50.0|2880,41.9,48.6,50.0,50.0,50.0,50.0,50.0,50.0|2890,42.3,49.3,50.0,50.0,50.0,50.0,50.0,50.0|2900,42.7,50.0,50.0,50.0,50.0,50.0,50.0,50.0|2910,43.1,50.0,50.0,50.0,50.0,50.0,50.0,50.0|2920,43.5,50.0,50.0,50.0,50.0,50.0,50.0,50.0|2930,43.8,50.0,50.0,50.0,50.0,50.0,50.0,50.0|2940,44.2,50.0,50.0,50.0,50.0,50.0,50.0,50.0|2950,44.6,50.0,50.0,50.0,50.0,50.0,50.0,50.0|2960,45.0,50.0,50.0,50.0,50.0,50.0,50.0,50.0|2970,45.6,50.0,50.0,50.0,50.0,50.0,50.0,50.0|2980,46.1,50.0,50.0,50.0,50.0,50.0,50.0,50.0|2990,46.7,50.0,50.0,50.0,50.0,50.0,50.0,50.0|3000,47.2,50.0,50.0,50.0,50.0,50.0,50.0,50.0|3010,47.8,50.0,50.0,50.0,50.0,50.0,50.0,50.0|3020,48.3,50.0,50.0,50.0,50.0,50.0,50.0,50.0|3030,48.9,50.0,50.0,50.0,50.0,50.0,50.0,50.0|3040,49.4,50.0,50.0,50.0,50.0,50.0,50.0,50.0|3050,50,50,50,50,50,50,50,50`;
+const CSV_CORRIDA_F = `1530,0,0,0,0,0|1540,0,0,0,0,10|1550,0,0,0,0,10.9|1560,0,0,0,0,11.8|1570,0,0,0,0,12.7|1580,0,0,0,0,13.6|1590,0,0,0,0,14.5|1600,0,0,0,10,15.5|1610,0,0,0,10.9,16.4|1620,0,0,0,11.8,17.3|1630,0,0,0,12.7,18.2|1640,0,0,0,13.6,19.1|1650,0,0,10,14.5,20|1660,0,0,10.6,15.5,20.7|1670,0,0,11.1,16.4,21.4|1680,0,0,11.7,17.3,22.1|1690,0,10,12.2,18.2,22.9|1700,0,10.6,12.8,19.1,23.6|1710,0,11.1,13.3,20,24.3|1720,0,11.7,13.9,20.8,25|1730,0,12.2,14.4,21.6,25.7|1740,0,12.8,15,22.4,26.4|1750,0,13.3,15.6,23.2,27.1|1760,10,13.9,16.1,23.9,27.9|1770,10.5,14.4,16.7,24.7,28.6|1780,11.1,15,17.2,25.5,29.3|1790,11.6,15.6,17.8,26.3,30|1800,12.1,16.1,18.3,27.1,30.7|1810,12.6,16.7,18.9,27.9,31.4|1820,13.2,17.2,19.4,28.7,32.1|1830,13.7,17.8,20,29.5,32.9|1840,14.2,18.3,20.6,30.3,33.6|1850,14.7,18.9,21.1,31.1,34.3|1860,15.3,19.4,21.7,31.8,35|1870,15.8,20,22.2,32.6,35.7|1880,16.3,20.5,22.8,33.4,36.4|1890,16.8,21.1,23.3,34.2,37.1|1900,17.4,21.6,23.9,35,37.9|1910,17.9,22.1,24.4,35.3,38.6|1920,18.4,22.7,25,35.7,39.3|1930,18.9,23.2,25.6,36,40|1940,19.5,23.8,26.1,36.3,40.7|1950,20,24.3,26.7,36.7,41.4|1960,20.6,24.8,27.2,37,42.1|1970,21.2,25.4,27.8,37.3,42.9|1980,21.8,25.9,28.3,37.7,43.6|1990,22.4,26.4,28.9,38,44.3|2000,23,27,29.4,38.3,45|2010,23.6,27.5,30,38.7,46.3|2020,24.2,28,30.6,39,47.5|2030,24.8,28.6,31.1,39.3,48.8|2040,25.4,29.1,31.7,39.7,50|2050,26,29.6,32.2,40,50|2060,26.6,30.2,32.8,40.3,50|2070,27.2,30.7,33.3,40.7,50|2080,27.8,31.3,33.9,41,50|2090,28.4,31.8,34.4,41.3,50|2100,29,32.3,35,41.7,50|2110,29.6,32.9,35.4,42,50|2120,30.2,33.4,35.8,42.3,50|2130,30.8,33.9,36.2,42.7,50|2140,31.4,34.5,36.5,43,50|2150,32,35,36.9,43.3,50|2160,32.6,35.4,37.3,43.7,50|2170,33.2,35.8,37.7,44,50|2180,33.8,36.2,38.1,44.3,50|2190,34.4,36.6,38.5,44.7,50|2200,35,37,38.8,45,50|2210,35.3,37.4,39.2,46.3,50|2220,35.7,37.8,39.6,47.5,50|2230,36,38.2,40,48.8,50|2240,36.4,38.6,40.4,50,50|2250,36.7,39,40.8,50,50|2260,37.1,39.4,41.2,50,50|2270,37.4,39.8,41.5,50,50|2280,37.8,40.2,41.9,50,50|2290,38.1,40.6,42.3,50,50|2300,38.4,41,42.7,50,50|2310,38.8,41.4,43.1,50,50|2320,39.1,41.8,43.5,50,50|2330,39.5,42.2,43.8,50,50|2340,39.8,42.6,44.2,50,50|2350,40.2,43,44.6,50,50|2360,40.5,43.4,45,50,50|2370,40.9,43.8,46.3,50,50|2380,41.2,44.2,47.5,50,50|2390,41.6,44.6,48.8,50,50|2400,41.9,45,50,50,50|2410,42.2,46.3,50,50,50|2420,42.6,47.5,50,50,50|2430,42.9,48.8,50,50,50|2440,43.3,50,50,50,50|2450,43.6,50,50,50,50|2460,44,50,50,50,50|2470,44.3,50,50,50,50|2480,44.7,50,50,50,50|2490,45,50,50,50,50|2500,45.6,50,50,50,50|2510,46.3,50,50,50,50|2520,46.9,50,50,50,50|2530,47.5,50,50,50,50|2540,48.1,50,50,50,50|2550,48.8,50,50,50,50|2560,49.4,50,50,50,50|2570,50,50,50,50,50`;
+const CSV_MARCHA_M = `3114,0,0,0,0,0|3000,0,0,0,0,10|2979,0,0,0,0,10.6|2964,0,0,0,0,11.1|2949,0,0,0,0,11.7|2934,0,0,0,0,12.2|2919,0,0,0,0,12.8|2904,0,0,0,0,13.3|2890,0,0,0,0,13.9|2875,0,0,0,0,14.4|2861,0,0,0,0,15|2847,0,0,0,0,15.6|2833,0,0,0,0,16.1|2820,0,0,0,10,16.7|2814,0,0,0,10.5,17.2|2801,0,0,0,11,17.8|2787,0,0,0,11.5,18.3|2774,0,0,0,12,18.9|2760,0,0,0,12.5,19.4|2747,0,0,0,13,20|2734,0,0,0,13.5,20.8|2721,0,0,0,14,21.7|2708,0,0,0,14.5,22.5|2696,0,0,0,15,23.3|2683,0,0,0,15.5,24.2|2670,0,0,10,16,25|2650,0,0,10.5,16.5,25.8|2638,0,0,11,17,26.7|2626,0,0,11.5,17.5,27.5|2614,0,0,12,18,28.3|2602,0,0,12.5,18.5,29.2|2591,0,0,13,19,30|2579,0,0,13.5,19.5,30.8|2568,0,0,14,20,31.7|2556,0,0,14.5,20.8,32.5|2545,0,0,15,21.6,33.3|2534,0,0,15.5,22.4,34.2|2520,0,10,16,23.2,35|2515,0,10.6,16.5,23.9,35.6|2504,0,11.1,17,24.7,36.1|2494,0,11.7,17.5,25.5,36.7|2483,0,12.2,18,26.3,37.2|2472,0,12.8,18.5,27.1,37.8|2460,10,13.3,19,27.9,38.3|2451,10.5,13.9,19.5,28.7,38.9|2441,11.1,14.4,20,29.5,39.4|2430,11.6,15,20.8,30.3,40|2420,12.1,15.6,21.6,31.1,40.6|2410,12.6,16.1,22.4,31.8,41.1|2400,13.2,16.7,23.2,32.6,41.7|2390,13.7,17.2,23.9,33.4,42.2|2380,14.2,17.8,24.7,34.2,42.8|2370,14.7,18.3,25.5,35,43.3|2361,15.3,18.9,26.3,35.5,43.9|2351,15.8,19.4,27.1,36,44.4|2340,16.3,20,27.9,36.5,45|2332,16.8,20.8,28.7,37,46.7|2323,17.4,21.7,29.5,37.5,48.3|2313,17.9,22.5,30.3,38.8,50|2304,18.4,23.3,31.1,38.5,50|2295,18.9,24.2,31.8,39,50|2286,19.5,25,32.6,39.5,50|2277,20,25.8,33.4,40,50|2268,20.8,26.7,34.2,40.5,50|2259,21.6,27.5,35,41,50|2250,22.4,28.3,35.5,41.5,50|2241,23.2,29.2,36.1,42,50|2233,23.9,30,36.6,42.5,50|2224,24.7,30.8,37.1,43,50|2215,25.5,31.7,37.6,43.5,50|2207,26.3,32.5,38.2,44,50|2198,27.1,33.3,38.7,44.5,50|2190,27.9,34.2,39.2,45,50|2179,28.7,35,39.7,46.7,50|2171,29.5,35.6,40.3,48.3,50|2163,30.3,36.1,40.8,50,50|2155,31.1,36.7,41.3,50,50|2147,31.8,37.2,41.8,50,50|2139,32.6,37.8,42.4,50,50|2131,33.4,38.3,42.9,50,50|2123,34.2,38.9,43.4,50,50|2115,35,39.4,43.9,50,50|2107,35.5,40,44.5,50,50|2100,36.1,40.6,45,50,50|2092,36.6,41.1,46.7,50,50|2084,37.1,41.7,48.3,50,50|2077,37.6,42.2,50,50,50|2069,38.2,42.8,50,50,50|2062,38.7,43.3,50,50,50|2055,39.2,43.9,50,50,50|2047,39.7,44.4,50,50,50|2040,40.3,45,50,50,50|2035,40.8,46.7,50,50,50|2028,41.3,48.3,50,50,50|2021,41.8,50,50,50,50|2014,42.4,50,50,50,50|2007,42.9,50,50,50,50|2000,43.4,50,50,50,50|1993,43.9,50,50,50,50|1986,44.5,50,50,50,50|1980,45,50,50,50,50|1973,46.7,50,50,50,50|1966,48.3,50,50,50,50|1959,50,50,50,50,50`;
+const CSV_MARCHA_F = `3221,0,0,0,0,0|3120,0,0,0,0,10|3069,0,0,0,0,12.4|3016,0,0,0,0,14.7|2940,0,0,0,10,18.2|2882,0,0,0,12.5,21.7|2824,0,0,0,15,25.8|2790,0,0,10,16.5,28.3|2734,0,0,12.6,19,32.5|2640,0,10,17.4,25.3,38.3|2580,10,13.2,20.8,29.8,41.7|2520,13,16.3,25.3,34.3,45|2467,16,19.5,29.8,37.5,50|2407,19.5,24.7,35,41,50|2340,25.3,31.1,39,45,50|2281,31.3,36.5,43,50,50|2223,36.4,40.5,50,50,50|2160,40.7,45,50,50,50|2100,45,50,50,50,50|2082,50,50,50,50,50`;
+
+const parseCSV = str => str.split('|').map(r => { let p = r.split(',').map(Number); return [p[0], p.slice(1)]; });
+const parseObj = str => Object.fromEntries(str.split('|').map(r => { let p = r.split(',').map(Number); return [p[0], p.slice(1)]; }));
+
+const OIC01 = parseCSV(CSV_CINTURA_M); const OIC05 = parseCSV(CSV_CINTURA_F);
+const OIC02 = parseObj(CSV_FLEXAO_M);  const OIC06 = parseObj(CSV_FLEXAO_F);
+const OIC03 = parseObj(CSV_ABDOMINAL_M); const OIC07 = parseObj(CSV_ABDOMINAL_F);
+const OIC04_ROWS = parseCSV(CSV_CORRIDA_M); const OIC08_ROWS = parseCSV(CSV_CORRIDA_F);
+const OIC04_MARCHA_ROWS = parseCSV(CSV_MARCHA_M); const OIC08_MARCHA_ROWS = parseCSV(CSV_MARCHA_F);
+
+/* ═══════════════════════════════════════════════════════
+   LÓGICA DE COLUNAS E BUSCAS
+   ═══════════════════════════════════════════════════════ */
+const M_COLS = { 
+  OIC01: est => est<=166?0 : est<=171?1 : est<=175?2 : est<=180?3 : est<=188?4 : 5,
+  OIC02: ida => ida<=20?0 : ida<=30?1 : ida<=34?2 : ida<=38?3 : ida<=41?4 : ida<=43?5 : ida<=49?6 : ida<=52?7 : 8,
+  OIC03: ida => ida<=27?0 : ida<=30?1 : ida<=33?2 : ida<=35?3 : ida<=38?4 : ida<=41?5 : ida<=44?6 : ida<=50?7 : 8,
+  OIC04: ida => ida<=29?0 : ida<=31?1 : ida<=35?2 : ida<=38?3 : ida<=41?4 : ida<=43?5 : ida<=47?6 : 7,
+  MARCH: ida => ida<=19?0 : ida<=29?1 : ida<=39?2 : ida<=49?3 : 4 
+};
+const F_COLS = { 
+  OIC05: est => est<=161?0 : est<=166?1 : 2,
+  OIC06: ida => ida<=21?0 : ida<=25?1 : ida<=29?2 : ida<=33?3 : ida<=37?4 : ida<=41?5 : ida<=45?6 : 7,
+  OIC07: ida => ida<=23?0 : ida<=25?1 : ida<=28?2 : ida<=30?3 : ida<=34?4 : ida<=38?5 : ida<=41?6 : ida<=45?7 : ida<=49?8 : 9,
+  OIC08: ida => ida<=29?0 : ida<=33?1 : ida<=38?2 : ida<=44?3 : 4,
+  MARCH: ida => ida<=19?0 : ida<=29?1 : ida<=39?2 : ida<=49?3 : 4 
+};
+
+function buscarPontoArrayAsc(arr, valor, col) {
+  if (valor < arr[0][0]) return 0;
+  if (valor >= arr[arr.length-1][0]) return arr[arr.length-1][1][col];
+  const exact = arr.find(r => r[0] === valor);
+  if (exact) return exact[1][col];
+  const above = arr.find(r => r[0] > valor);
+  const below = arr.slice().reverse().find(r => r[0] < valor);
+  const t = (valor - below[0]) / (above[0] - below[0]);
+  return below[1][col] + t * (above[1][col] - below[1][col]);
+}
+
+function buscarPontoArrayDesc(arr, valor, col) {
+  if (valor >= arr[0][0]) return 0;
+  if (valor <= arr[arr.length-1][0]) return arr[arr.length-1][1][col];
+  const exact = arr.find(r => r[0] === valor);
+  if (exact) return exact[1][col];
+  const below = arr.find(r => r[0] < valor); 
+  const above = arr.slice().reverse().find(r => r[0] > valor); 
+  const t = (valor - below[0]) / (above[0] - below[0]);
+  return below[1][col] + t * (above[1][col] - below[1][col]);
+}
+
+function buscarPontoObj(obj, valor, col) {
+  const keys = Object.keys(obj).map(Number).sort((a,b)=>a-b);
+  if (valor < keys[0]) return 0;
+  if (valor >= keys[keys.length-1]) return obj[keys[keys.length-1]][col];
+  return obj[valor] ? obj[valor][col] : 0;
+}
+
+function sec2MMSS(s) { let m=Math.floor(s/60), sc=s%60; return String(m).padStart(2,'0')+':'+String(sc).padStart(2,'0'); }
+
+function calcTargets(data, isObj, isDesc, col, maxPts, fnFormata) {
+  let [tS, tB, tMB, tE, tMAX] = maxPts === 30 ? [6,12,21,27,30] : maxPts === 50 ? [10,20,35,45,50] : [2,4,7,9,10];
+  let items = isObj ? Object.keys(data).map(Number).sort((a,b)=>a-b).map(k => [k, data[k]]) : data;
+
+  let validS = items.filter(i => i[1][col] >= tS).map(i => i[0]);
+  let validB = items.filter(i => i[1][col] >= tB).map(i => i[0]);
+  let validMB = items.filter(i => i[1][col] >= tMB).map(i => i[0]);
+  let validE = items.filter(i => i[1][col] >= tE).map(i => i[0]);
+  let validMAX = items.filter(i => i[1][col] >= tMAX).map(i => i[0]);
+
+  let res = {};
+  res.S = validS.length ? (isDesc ? Math.max(...validS) : Math.min(...validS)) : null;
+  res.B = validB.length ? (isDesc ? Math.max(...validB) : Math.min(...validB)) : null;
+  res.MB = validMB.length ? (isDesc ? Math.max(...validMB) : Math.min(...validMB)) : null;
+  res.E = validE.length ? (isDesc ? Math.max(...validE) : Math.min(...validE)) : null;
+  res.MAX = validMAX.length ? (isDesc ? Math.max(...validMAX) : Math.min(...validMAX)) : null;
+
+  return `<tr><td class="oic-label">${fnFormata.name}</td>
+          <td class="c-s val-meta">${res.S !== null ? fnFormata.f(res.S) : '-'}</td>
+          <td class="c-b val-meta">${res.B !== null ? fnFormata.f(res.B) : '-'}</td>
+          <td class="c-mb val-meta">${res.MB !== null ? fnFormata.f(res.MB) : '-'}</td>
+          <td class="c-e val-meta">${res.E !== null ? fnFormata.f(res.E) : '-'}</td>
+          <td class="c-max val-meta">${res.MAX !== null ? fnFormata.f(res.MAX) : '-'}</td></tr>`;
+}
+
+/* ═══════════════════════════════════════════════════════
+   INTERFACE E EVENTOS
+   ═══════════════════════════════════════════════════════ */
+let tipoAerobico = 'corrida';
+
+function setAerobico(tipo) {
+  tipoAerobico = tipo;
+  document.getElementById('btn-corrida').classList.toggle('active', tipo === 'corrida');
+  document.getElementById('btn-marcha').classList.toggle('active', tipo === 'marcha');
+  document.getElementById('input-corrida').style.display = tipo === 'corrida' ? 'grid' : 'none';
+  document.getElementById('input-marcha').style.display = tipo === 'marcha' ? 'grid' : 'none';
+}
+
+function atualizarMetas() {
+  const sexo = document.getElementById('sexo').value;
+  const idade = parseInt(document.getElementById('idade').value);
+  const estatura = parseFloat(document.getElementById('estatura').value);
+  
+  if(sexo === 'F') { 
+      document.getElementById('t-flex').innerText = 'OIC 06 · Flexão (Nova)';
+      document.getElementById('d-flex').innerText = 'Sem apoio dos joelhos (a partir de 2026)';
+  } else { 
+      document.getElementById('t-flex').innerText = 'OIC 02 · Flexão';
+      document.getElementById('d-flex').innerText = 'Repetições sem pausa';
+  }
+
+  if(!idade || !estatura) { document.getElementById('card-metas').style.display = 'none'; return; }
+  document.getElementById('card-metas').style.display = 'block';
+
+  let html = '';
+  if (sexo === 'M') {
+    html += calcTargets(OIC01, false, true, M_COLS.OIC01(estatura), 30, {name:'Cintura', f:v=>'≤ '+v.toFixed(1)+'cm'});
+    html += calcTargets(OIC02, true, false, M_COLS.OIC02(idade), 10, {name:'Flexão', f:v=>'≥ '+v+' rep'});
+    html += calcTargets(OIC03, true, false, M_COLS.OIC03(idade), 10, {name:'Abdominal', f:v=>'≥ '+v+' rep'});
+    html += calcTargets(OIC04_ROWS, false, false, M_COLS.OIC04(idade), 50, {name:'Corrida 12m', f:v=>'≥ '+v+'m'});
+    html += calcTargets(OIC04_MARCHA_ROWS, false, true, M_COLS.MARCH(idade), 50, {name:'Marcha 4.8km', f:v=>'≤ '+sec2MMSS(v)});
+  } else {
+    html += calcTargets(OIC05, false, true, F_COLS.OIC05(estatura), 30, {name:'Cintura', f:v=>'≤ '+v.toFixed(1)+'cm'});
+    html += calcTargets(OIC06, true, false, F_COLS.OIC06(idade), 10, {name:'Flexão', f:v=>'≥ '+v+' rep'});
+    html += calcTargets(OIC07, true, false, F_COLS.OIC07(idade), 10, {name:'Abdominal', f:v=>'≥ '+v+' rep'});
+    html += calcTargets(OIC08_ROWS, false, false, F_COLS.OIC08(idade), 50, {name:'Corrida 12m', f:v=>'≥ '+v+'m'});
+    html += calcTargets(OIC08_MARCHA_ROWS, false, true, F_COLS.MARCH(idade), 50, {name:'Marcha 4.8km', f:v=>'≤ '+sec2MMSS(v)});
+  }
+  document.getElementById('metas-body').innerHTML = html;
+}
+
+function calcular() {
+  const sexo = document.getElementById('sexo').value;
+  const idade = parseInt(document.getElementById('idade').value);
+  const estatura = parseFloat(document.getElementById('estatura').value);
+  const cintura = Math.round(parseFloat(document.getElementById('cintura').value) * 2)/2;
+  const flexao = parseInt(document.getElementById('flexao').value);
+  const abdom = parseInt(document.getElementById('abdominal').value);
+
+  let aeroVal = null, aeroTxt = '';
+  if (tipoAerobico === 'corrida') {
+    aeroVal = Math.round((parseFloat(document.getElementById('corrida_m').value)||0) / 10)*10;
+    aeroTxt = aeroVal + 'm';
+  } else {
+    const min = parseInt(document.getElementById('marcha_min').value) || 0;
+    const seg = parseInt(document.getElementById('marcha_seg').value) || 0;
+    aeroVal = (min * 60) + seg;
+    aeroTxt = sec2MMSS(aeroVal);
+  }
+
+  const alertEl = document.getElementById('alert-err');
+  if (!idade || !estatura || isNaN(cintura) || isNaN(flexao) || isNaN(abdom) || aeroVal===0) {
+    alertEl.classList.add('show'); return;
+  }
+  alertEl.classList.remove('show');
+
+  let ptsCin, ptsFle, ptsAbd, ptsAer;
+  if(sexo === 'M') {
+    ptsCin = buscarPontoArrayDesc(OIC01, cintura, M_COLS.OIC01(estatura));
+    ptsFle = buscarPontoObj(OIC02, flexao, M_COLS.OIC02(idade));
+    ptsAbd = buscarPontoObj(OIC03, abdom, M_COLS.OIC03(idade));
+    ptsAer = tipoAerobico === 'corrida' ? buscarPontoArrayAsc(OIC04_ROWS, aeroVal, M_COLS.OIC04(idade)) : buscarPontoArrayDesc(OIC04_MARCHA_ROWS, aeroVal, M_COLS.MARCH(idade));
+  } else {
+    ptsCin = buscarPontoArrayDesc(OIC05, cintura, F_COLS.OIC05(estatura));
+    ptsFle = buscarPontoObj(OIC06, flexao, F_COLS.OIC06(idade));
+    ptsAbd = buscarPontoObj(OIC07, abdom, F_COLS.OIC07(idade));
+    ptsAer = tipoAerobico === 'corrida' ? buscarPontoArrayAsc(OIC08_ROWS, aeroVal, F_COLS.OIC08(idade)) : buscarPontoArrayDesc(OIC08_MARCHA_ROWS, aeroVal, F_COLS.MARCH(idade));
+  }
+
+  const grauFinal = ptsCin + ptsFle + ptsAbd + ptsAer;
+  const apto = (ptsCin>0 && ptsFle>0 && ptsAbd>0 && ptsAer>0 && grauFinal>=20);
+
+  let cLabel, cColor;
+  if(!apto) { cLabel = "Insatisfatório (I)"; cColor = "#EF5350"; }
+  else if(grauFinal >= 90) { cLabel = "Excelente (E)"; cColor = "#64B5F6"; }
+  else if(grauFinal >= 70) { cLabel = "Muito Bom (MB)"; cColor = "#81C784"; }
+  else if(grauFinal >= 40) { cLabel = "Bom (B)"; cColor = "#AED581"; }
+  else { cLabel = "Satisfatório (S)"; cColor = "#FFD54F"; }
+
+  document.getElementById('resultado').style.display = 'block';
+  document.getElementById('res-info').textContent = (sexo === 'M' ? 'Masc' : 'Fem') + ' · ' + idade + ' anos · ' + estatura + ' cm';
+  document.getElementById('res-grau').innerText = grauFinal.toFixed(1);
+  
+  const msgMax = document.getElementById('msg-max-score');
+  if(apto && grauFinal === 100) { msgMax.style.display = 'block'; } else { msgMax.style.display = 'none'; }
+
+  const aptEl = document.getElementById('res-apt');
+  aptEl.innerText = apto ? "✓ APTO" : "✗ NÃO APTO";
+  aptEl.className = "badge-apt " + (apto ? "apt-apto" : "apt-inapto");
+  
+  const concEl = document.getElementById('res-conceito');
+  concEl.innerText = cLabel; concEl.style.color = cColor;
+
+  const bDown = [
+    {n: sexo==='M'?'OIC 01 Cintura':'OIC 05 Cintura', v: cintura+'cm', p: ptsCin, mx: 30},
+    {n: sexo==='M'?'OIC 02 Flexão':'OIC 06 Flexão', v: flexao+' rep', p: ptsFle, mx: 10},
+    {n: sexo==='M'?'OIC 03 Abdominal':'OIC 07 Abdominal', v: abdom+' rep', p: ptsAbd, mx: 10},
+    {n: sexo==='M'?'OIC 04 Aeróbico':'OIC 08 Aeróbico', v: aeroTxt, p: ptsAer, mx: 50},
+  ];
+
+  document.getElementById('oic-breakdown').innerHTML = bDown.map((o,i) => {
+    let pBar = Math.min((o.p/o.mx)*100, 100);
+    return `
+    <div class="oic-card" style="animation-delay:${i*0.08}s; border-color:${o.p>0?'rgba(255,255,255,0.08)':'rgba(239,83,80,0.3)'}">
+      <div class="oic-name">${o.n}</div>
+      <div class="oic-value" style="color:${o.p>0?'#fff':'#EF9A9A'}">${o.p.toFixed(1)}</div>
+      <div class="oic-pts">de ${o.mx} pts · <strong>${o.v}</strong></div>
+      <div style="height:4px;background:rgba(255,255,255,0.08);border-radius:4px;margin:8px 0 4px">
+        <div style="height:100%;width:${pBar}%;background:${o.p>0?'var(--sky-bright)':'#EF5350'};border-radius:4px;transition:width 0.8s ease ${i*0.1}s"></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('card-resultado').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function resetarFormulario() {
+  document.querySelectorAll('input').forEach(i => i.value = '');
+  document.getElementById('resultado').style.display = 'none';
+  document.getElementById('card-metas').style.display = 'none';
+  document.getElementById('alert-err').classList.remove('show');
+  setAerobico('corrida');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
