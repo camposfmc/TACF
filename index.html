@@ -412,13 +412,13 @@ function atualizarMetas() {
     html += calcTargets(OIC01, false, true, M_COLS.OIC01(estatura), 30, {name:'Cintura', f:v=>'≤ '+v.toFixed(1)+'cm'});
     html += calcTargets(OIC02, true, false, M_COLS.OIC02(idade), 10, {name:'Flexão', f:v=>'≥ '+v+' rep'});
     html += calcTargets(OIC03, true, false, M_COLS.OIC03(idade), 10, {name:'Abdominal', f:v=>'≥ '+v+' rep'});
-    html += calcTargets(OIC04_ROWS, false, false, M_COLS.OIC04(idade), 50, {name:'Corrida 12m', f:v=>'≥ '+v+'m'});
+    html += calcTargets(OIC04_ROWS, false, false, M_COLS.OIC04(idade), 50, {name:'Corrida 12min', f:v=>'≥ '+v+'m'});
     html += calcTargets(OIC04_MARCHA_ROWS, false, true, M_COLS.MARCH(idade), 50, {name:'Marcha 4.8km', f:v=>'≤ '+sec2MMSS(v)});
   } else {
     html += calcTargets(OIC05, false, true, F_COLS.OIC05(estatura), 30, {name:'Cintura', f:v=>'≤ '+v.toFixed(1)+'cm'});
     html += calcTargets(OIC06, true, false, F_COLS.OIC06(idade), 10, {name:'Flexão', f:v=>'≥ '+v+' rep'});
     html += calcTargets(OIC07, true, false, F_COLS.OIC07(idade), 10, {name:'Abdominal', f:v=>'≥ '+v+' rep'});
-    html += calcTargets(OIC08_ROWS, false, false, F_COLS.OIC08(idade), 50, {name:'Corrida 12m', f:v=>'≥ '+v+'m'});
+    html += calcTargets(OIC08_ROWS, false, false, F_COLS.OIC08(idade), 50, {name:'Corrida 12min', f:v=>'≥ '+v+'m'});
     html += calcTargets(OIC08_MARCHA_ROWS, false, true, F_COLS.MARCH(idade), 50, {name:'Marcha 4.8km', f:v=>'≤ '+sec2MMSS(v)});
   }
   document.getElementById('metas-body').innerHTML = html;
@@ -521,5 +521,6 @@ function resetarFormulario() {
 </body>
 
 </html>
+
 
 
