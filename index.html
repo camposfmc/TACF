@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TACF · NSCA 54-3/2026 · SEXTO COMANDO AÉREO REGIONAL</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-badge">SEXTO COMANDO AÉREO REGIONAL</div>
+  <h1>TACF</h1>
+  <p class="hero-sub">Teste de Avaliação do Condicionamento Físico</p>
+  <p class="hero-norm">NSCA 54-3/2026 · Portaria CDA Nº 28/SCMD de 25 de abril de 2026</p>
+  <p class="hero-norm" style="margin-top: 4px;">Sugestões para: camposfmc@fab.mil.br</p>
+</div>
+
+<div class="app">
+
+  <!-- CARD 1: IDENTIFICAÇÃO -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">👤</div>
+      <div>
+        <div class="card-title">Identificação</div>
+        <div class="card-desc">Insira seus dados para gerar as metas automáticas</div>
+      </div>
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Sexo</label>
+        <select id="sexo">
+          <option value="M">Masculino</option>
+          <option value="F">Feminino</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Idade (anos)</label>
+        <input type="number" id="idade" placeholder="Ex: 28" min="18" max="75">
+      </div>
+      <div class="form-group">
+        <label>Estatura (cm)</label>
+        <input type="number" id="estatura" placeholder="Ex: 175" min="140" max="220">
+      </div>
+    </div>
+
+    <!-- Toggle de Transição Feminina (Art. 109) -->
+    <div id="transicao-fem-container" class="checkbox-container" style="display:none;">
+      <input type="checkbox" id="transicao_fem">
+      <label for="transicao_fem">
+        <strong>Regra de Transição Adaptativa (Art. 109):</strong> Militar recém-formada em curso de até 180 dias (execução com apoio dos joelhos por até 6 meses).
+      </label>
+    </div>
+  </div>
+
+  <!-- METAS AUTOMÁTICAS -->
+  <div class="card" id="card-metas" style="display: none;">
+    <div class="card-header">
+      <div class="card-icon">🎯</div>
+      <div>
+        <div class="card-title">Suas Metas Oficiais de Condicionamento (Anexo IV)</div>
+        <div class="card-desc" id="metas-subtitulo">Índices regulamentares da NSCA 54-3/2026 de acordo com seu perfil</div>
+      </div>
+    </div>
+    <div class="table-scroll-hint">
+      <span>↔ Arraste para o lado para ver todas as menções</span>
+    </div>
+    <div class="table-responsive">
+      <table class="metas-table">
+        <thead>
+          <tr>
+            <th class="col-prova">Prova</th>
+            <th class="c-s"><span class="so-desktop">Satisfatório</span><span class="so-celular">S</span></th>
+            <th class="c-b"><span class="so-desktop">Bom</span><span class="so-celular">B</span></th>
+            <th class="c-mb"><span class="so-desktop">Muito Bom</span><span class="so-celular">MB</span></th>
+            <th class="c-e"><span class="so-desktop">Excelente</span><span class="so-celular">E</span></th>
+            <th class="c-max"><span class="so-desktop">Máximo</span><span class="so-celular">MÁX</span></th>
+          </tr>
+        </thead>
+        <tbody id="metas-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 1ª ETAPA: FREQUÊNCIA CARDÍACA DE REPOUSO (ANTES DO OIC 01) -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🫀</div>
+      <div>
+        <div class="card-title">1ª Etapa · Frequência Cardíaca de Repouso (FC)</div>
+        <div class="card-desc">Item 1 do Quadro 2 e Art. 24 da NSCA 54-3/2026 (Decúbito dorsal por 10 min · Opcional)</div>
+      </div>
+    </div>
+    <input type="number" id="fc_repouso" placeholder="Frequência Cardíaca em bpm (Ex: 72) - Campo Opcional" min="30" max="220">
+    <div class="previa" id="previa-fc" aria-live="polite"></div>
+    <div id="alert-fc" class="alert-medico">
+      🚨 <strong>ALERTA MÉDICO (Art. 24):</strong> FC de repouso superior a 100 batimentos por minuto. 
+      O avaliado deve ser encaminhado a um médico para verificação antes de realizar qualquer esforço físico.
+    </div>
+  </div>
+
+  <!-- PROVA 1: CINTURA (OIC 01 / 05) -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">📏</div>
+      <div>
+        <div class="card-title" id="t-cintura">OIC 01/05 · Circunferência da Cintura</div>
+        <div class="card-desc">Ponto médio entre a última costela e a crista ilíaca (em decúbito frontal/pele descoberta)</div>
+      </div>
+    </div>
+    <input type="number" id="cintura" step="0.1" placeholder="Sua medida em cm (Ex: 85.3)">
+    <div class="previa" id="previa-cintura" aria-live="polite"></div>
+    <div class="previa-falta" id="falta-cintura"></div>
+  </div>
+
+  <!-- PROVA 2: FLEXÃO -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">💪</div>
+      <div>
+        <div class="card-title" id="t-flex">OIC 02 · Flexão de Braços</div>
+        <div class="card-desc" id="d-flex">Repetições sem pausa para descanso (corpo estendido a 45º)</div>
+      </div>
+    </div>
+    <input type="number" id="flexao" placeholder="Nº de repetições completas">
+    <div class="previa" id="previa-flexao" aria-live="polite"></div>
+    <div class="previa-falta" id="falta-flexao"></div>
+  </div>
+
+  <!-- PROVA 3: ABDOMINAL -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🔄</div>
+      <div>
+        <div class="card-title">OIC 03/07 · Resistência Abdominal</div>
+        <div class="card-desc">Flexão do tronco sobre as coxas em 1 minuto (escápulas tocam o solo)</div>
+      </div>
+    </div>
+    <input type="number" id="abdominal" placeholder="Nº de repetições em 1 min">
+    <div class="previa" id="previa-abdominal" aria-live="polite"></div>
+    <div class="previa-falta" id="falta-abdominal"></div>
+  </div>
+
+  <!-- PROVA 4: AERÓBICO -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🏃</div>
+      <div>
+        <div class="card-title">OIC 04/08 · Capacidade Aeróbica Máxima</div>
+        <div class="card-desc">Corrida de 12 min ou Teste Substitutivo de Marcha 4,8 km (Art. 101 e 102)</div>
+      </div>
+    </div>
+    <div class="aerobic-toggle">
+      <button class="toggle-btn active" id="btn-corrida">🏃 Corrida 12 min (Padrão)</button>
+      <button class="toggle-btn" id="btn-marcha">🚶 Andar 4,8 km (Substitutivo - Art. 102)</button>
+    </div>
+    <div id="input-corrida">
+      <input type="number" id="corrida_m" placeholder="Distância percorrida em metros (Ex: 2400, múltiplo de 10m)">
+    </div>
+    <div id="input-marcha" class="form-grid" style="display:none;">
+      <div class="form-group">
+        <label>Minutos</label>
+        <input type="number" id="marcha_min" placeholder="Ex: 42">
+      </div>
+      <div class="form-group">
+        <label>Segundos</label>
+        <input type="number" id="marcha_seg" placeholder="Ex: 30" max="59">
+      </div>
+    </div>
+    <div class="previa" id="previa-aerobico" aria-live="polite"></div>
+    <div class="previa-falta" id="falta-aerobico"></div>
+  </div>
+
+  <div id="alert-err" class="alert">⚠️ Preencha todos os campos obrigatórios antes de calcular o resultado final.</div>
+
+  <button class="btn-calc" id="btn-calcular">CALCULAR RESULTADO FINAL</button>
+
+  <!-- RESULTADOS -->
+  <div id="resultado">
+    <div class="card" style="margin-top: 24px;" id="card-resultado">
+      <div class="card-header">
+        <div class="card-icon">📊</div>
+        <div><div class="card-title">Resultado e Homologação Final</div><div class="card-desc" id="res-info"></div></div>
+      </div>
+      
+      <div id="msg-max-score" class="max-score-msg">
+        🏆 NOTA MÁXIMA (GRAU 100)! PARABÉNS! 🏆<br>
+        <span style="font-size: 13px; font-weight: normal; opacity: 0.95;">
+          Concorrente ao Diploma de <strong>Mérito de Condicionamento Físico</strong> da OM (Art. 76 da NSCA 54-3/2026).
+        </span>
+      </div>
+
+      <div id="msg-destaque-score" class="destaque-score-msg">
+        ⭐ <strong>DESTAQUE OPERACIONAL (GRAU ≥ 96 PONTOS)</strong><br>
+        Elegível à recomendação aos Comandantes de incentivo ao TFM descentralizado fora do ambiente laboral (Art. 110 da NSCA 54-3/2026).
+      </div>
+
+      <div class="result-header">
+        <div class="badge-apt" id="res-apt">—</div>
+        <div>Grau Final: <span class="grade-number" id="res-grau">0</span> pontos</div>
+        <div style="font-size: 18px; margin-top: 10px; font-weight: bold;" id="res-conceito"></div>
+        <div id="res-motivo-inapto" style="font-size: 12px; color: #FFCDD2; margin-top: 6px; display: none;"></div>
+      </div>
+      
+      <div class="oic-grid" id="oic-breakdown"></div>
+      
+      <button class="btn-reset" id="btn-reset">🔄 Limpar Formulário e Reiniciar</button>
+    </div>
+  </div>
+
+  <!-- DESTAQUES DA NOVA NSCA 54-3/2026 -->
+  <div class="norma-info-box">
+    <div class="norma-info-header">
+      📌 Destaques Operacionais da NSCA 54-3/2026 (Portaria CDA Nº 28/SCMD)
+    </div>
+    <div class="norma-grid">
+      <div class="norma-item">
+        <strong>1. Flexão Feminina sem Joelhos (Art. 108)</strong>
+        Desde o TACF/1 de 2026, vigora obrigatoriamente a execução sem apoio dos joelhos (Tabela 2 do OIC 06), com 9 faixas etárias e até 26 reps.
+      </div>
+      <div class="norma-item">
+        <strong>2. Auditoria por Amostragem (Art. 82-95)</strong>
+        A CDA realizará auditorias periódicas em até 3% do efetivo avaliado. Em discrepâncias injustificadas, o resultado da auditoria prevalece no SIGTACF.
+      </div>
+      <div class="norma-item">
+        <strong>3. Regra dos 3 Anos / 6 TACF em NR (Art. 68)</strong>
+        Militar em "Não Realizado" por mais de 3 anos consecutivos ou 6 testes, mesmo com Junta de Saúde, tem a menção revertida para NÃO APTO (Grau 19,0).
+      </div>
+      <div class="norma-item">
+        <strong>4. PAR-Q e Prazos SIGTACF (Art. 50 e 74)</strong>
+        Preenchimento do PAR-Q mandatório com ≥ 10 dias de antecedência. Prazos de boletim: 1º TACF até 15/abril e 2º TACF até 15/novembro.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script type="module" src="js/ui-calculadora.js"></script>
+</body>
+</html>

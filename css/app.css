@@ -1,0 +1,318 @@
+  :root {
+    --navy: #0A1628; --navy-mid: #0F2040; --navy-light: #1A3460;
+    --sky: #1565C0; --sky-bright: #1E88E5; --ice: #E3F2FD;
+    --gold: #F9A825; --gold-light: #FFD54F;
+    --red: #C62828; --green: #1B5E20; --green-bright: #2E7D32;
+    --white: #FFFFFF; --fog: #F0F4F8; --mist: #B0BEC5;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    min-height: 100vh;
+    color: var(--white);
+    overflow-x: hidden;
+  }
+
+  /* ── HERO HEADER ── */
+  .hero {
+    position: relative;
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 50%, #0D1F3C 100%);
+    padding: 48px 24px 40px;
+    text-align: center;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(21,101,192,0.25) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(21,101,192,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(21,101,192,0.06) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(21,101,192,0.2); border: 1px solid rgba(30,136,229,0.4);
+    border-radius: 100px; padding: 6px 16px; font-size: 11px; font-weight: 500;
+    letter-spacing: 2px; text-transform: uppercase; color: #90CAF9; margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif; font-size: clamp(52px, 10vw, 96px);
+    letter-spacing: 6px; line-height: 0.9;
+    background: linear-gradient(135deg, var(--white) 0%, #90CAF9 50%, var(--gold-light) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 10px;
+  }
+  .hero-sub { font-size: 13px; letter-spacing: 3px; text-transform: uppercase; color: var(--mist); font-weight: 300; margin-bottom: 8px; }
+  .hero-norm { font-family: 'DM Mono', monospace; font-size: 11px; color: rgba(144,202,249,0.7); letter-spacing: 1px; }
+
+  /* ── MAIN LAYOUT ── */
+  .app { max-width: 920px; margin: 0 auto; padding: 32px 20px 64px; }
+
+  /* ── CARDS ── */
+  .card {
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 16px; padding: 28px; margin-bottom: 16px;
+    backdrop-filter: blur(4px); transition: border-color 0.3s;
+  }
+  .card:hover { border-color: rgba(30,136,229,0.25); }
+  .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .card-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--sky) 0%, var(--sky-bright) 100%);
+    display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;
+  }
+  .card-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; color: var(--white); }
+  .card-desc { font-size: 12px; color: var(--mist); font-weight: 300; letter-spacing: 0.5px; }
+
+  /* ── FORM ── */
+  .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; }
+  .form-group { display: flex; flex-direction: column; gap: 8px; }
+  .form-group label { font-size: 11px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: #90CAF9; }
+  select, input[type="number"] {
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px; padding: 12px 14px; font-family: 'DM Sans', sans-serif;
+    font-size: 15px; color: var(--white); width: 100%; transition: all 0.25s; outline: none;
+  }
+  select option { background: var(--navy-mid); color: var(--white); }
+  input:focus, select:focus { border-color: var(--sky-bright); background: rgba(21,101,192,0.12); box-shadow: 0 0 0 3px rgba(30,136,229,0.15); }
+  input::placeholder { color: rgba(255,255,255,0.25); }
+
+  /* ── BADGES & TOGGLES ── */
+  .badge-norma {
+    display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 10px;
+    font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-left: 8px;
+    background: rgba(30,136,229,0.25); border: 1px solid rgba(30,136,229,0.5); color: #90CAF9;
+  }
+  .checkbox-container {
+    display: flex; align-items: center; gap: 10px; margin-top: 14px; padding: 10px 14px;
+    background: rgba(255,255,255,0.04); border-radius: 10px; border: 1px dashed rgba(255,255,255,0.15);
+    cursor: pointer; user-select: none;
+  }
+  .checkbox-container input { width: 16px; height: 16px; cursor: pointer; }
+  .checkbox-container label { font-size: 12px; color: #E3F2FD; cursor: pointer; }
+
+  .aerobic-toggle { display: flex; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 4px; gap: 4px; margin-bottom: 16px; }
+  .toggle-btn { flex: 1; padding: 10px 12px; border: none; border-radius: 7px; background: transparent; color: var(--mist); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.25s; }
+  .toggle-btn.active { background: var(--sky); color: var(--white); box-shadow: 0 2px 8px rgba(21,101,192,0.4); }
+
+  .btn-calc {
+    width: 100%; padding: 18px; border: none; border-radius: 12px;
+    background: linear-gradient(135deg, var(--sky) 0%, #0D47A1 100%); color: var(--white);
+    font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 4px; cursor: pointer;
+    transition: all 0.3s; margin-top: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  }
+  .btn-calc:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(21,101,192,0.5); }
+  
+  .btn-reset {
+    width: 100%; padding: 14px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 13px;
+    text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; border: 1px solid rgba(255,255,255,0.1);
+    background: transparent; color: var(--mist); margin-top: 16px;
+  }
+  .btn-reset:hover { background: rgba(255,255,255,0.05); color: white; }
+
+  /* ── ALERTAS ── */
+  .alert {
+    background: rgba(249,168,37,0.1); border: 1px solid rgba(249,168,37,0.3); border-radius: 10px;
+    padding: 14px 18px; font-size: 13px; color: var(--gold-light); margin-top: 16px; display: none; text-align: center;
+  }
+  .alert.show { display: block; }
+
+  .alert-medico {
+    background: rgba(198,40,40,0.15); border: 1px solid rgba(244,67,54,0.4); border-radius: 10px;
+    padding: 14px 18px; font-size: 13px; color: #FFCDD2; margin-top: 12px; display: none; line-height: 1.4;
+  }
+
+  /* ── METAS TABLE ── */
+  .table-scroll-hint {
+    display: none;
+    font-size: 11px;
+    color: #90CAF9;
+    text-align: right;
+    margin-bottom: 8px;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+    letter-spacing: 0.5px;
+  }
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    position: relative;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(30, 136, 229, 0.5) rgba(255, 255, 255, 0.04);
+  }
+  .table-responsive::-webkit-scrollbar {
+    height: 5px;
+  }
+  .table-responsive::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 4px;
+  }
+  .table-responsive::-webkit-scrollbar-thumb {
+    background: rgba(30, 136, 229, 0.5);
+    border-radius: 4px;
+  }
+  .table-responsive::-webkit-scrollbar-thumb:hover {
+    background: rgba(30, 136, 229, 0.8);
+  }
+
+  .metas-table {
+    width: 100%;
+    min-width: 530px;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 12.5px;
+    text-align: center;
+  }
+  .metas-table th, .metas-table td {
+    padding: 11px 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    white-space: nowrap;
+  }
+  .metas-table thead th {
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    background: #0D1F3C;
+    border-bottom: 2px solid rgba(30, 136, 229, 0.35);
+  }
+
+  /* Coluna 1 Fixa (Sticky) para navegação fluida em telas móveis */
+  .metas-table th.col-prova,
+  .metas-table td.oic-label {
+    position: sticky;
+    left: 0;
+    background: #0E2242;
+    z-index: 2;
+    text-align: left;
+    font-weight: 600;
+    padding-left: 12px;
+    min-width: 120px;
+    max-width: 135px;
+    white-space: normal;
+    line-height: 1.25;
+    box-shadow: 3px 0 8px rgba(0, 0, 0, 0.4);
+  }
+  .metas-table thead th.col-prova {
+    z-index: 3;
+    background: #0A182F;
+  }
+
+  .val-meta { font-family: 'DM Mono', monospace; font-weight: 500; }
+  .c-s { color: var(--gold-light); } .c-b { color: #AED581; } .c-mb { color: #81C784; } .c-e { color: #64B5F6; } .c-max { color: #E1BEE7; }
+
+  /* ── RESULTADOS ── */
+  #resultado { display: none; }
+  .result-header { text-align: center; padding: 20px 0; }
+  .grade-number { font-family: 'Bebas Neue', sans-serif; font-size: 56px; color: var(--gold-light); }
+  .badge-apt { padding: 12px; border-radius: 10px; font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 2px; text-align: center; margin-bottom: 10px; }
+  .apt-apto { background: rgba(46,125,50,0.3); border: 1px solid rgba(76,175,80,0.5); color: #A5D6A7; }
+  .apt-inapto { background: rgba(198,40,40,0.3); border: 1px solid rgba(244,67,54,0.5); color: #FFCDD2; }
+  
+  .max-score-msg {
+    display: none; background: linear-gradient(135deg, #FFD54F 0%, #F9A825 100%);
+    color: #0A1628; font-weight: bold; font-size: 15px; padding: 16px; border-radius: 10px;
+    margin-bottom: 20px; text-align: center; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(249,168,37,0.4);
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .destaque-score-msg {
+    display: none; background: linear-gradient(135deg, #1976D2 0%, #0D47A1 100%);
+    border: 1px solid #42A5F5; color: #FFFFFF; font-weight: 500; font-size: 14px; padding: 14px; border-radius: 10px;
+    margin-bottom: 20px; text-align: center; letter-spacing: 0.5px;
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
+  .oic-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 20px; }
+  .oic-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px; text-align: center; }
+  .oic-name { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--mist); margin-bottom: 6px; }
+  .oic-value { font-family: 'DM Mono', monospace; font-size: 22px; font-weight: 500; margin-bottom: 4px; }
+  .oic-pts { font-size: 11px; color: var(--mist); }
+
+  /* ── NORMA 2026 INFO BOX ── */
+  .norma-info-box {
+    margin-top: 32px; background: rgba(21,101,192,0.08); border: 1px solid rgba(30,136,229,0.25);
+    border-radius: 16px; padding: 22px 24px; font-size: 12px; line-height: 1.6; color: #CFD8DC;
+  }
+  .norma-info-header { font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: #90CAF9; letter-spacing: 2px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .norma-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 10px; }
+  .norma-item { background: rgba(0,0,0,0.2); padding: 12px; border-radius: 10px; border-left: 3px solid var(--sky-bright); }
+  .norma-item strong { color: #FFFFFF; font-size: 12px; display: block; margin-bottom: 4px; }
+
+  /* ── VERSÕES DESKTOP/CELULAR DA TABELA DE METAS ── */
+  .so-celular { display: none; }
+
+  /* ── OTIMIZAÇÃO ESPECÍFICA PARA TELAS DE CELULAR (MOBILE) ── */
+  @media (max-width: 640px) {
+    .hero { padding: 32px 16px 24px; }
+    .hero h1 { font-size: 52px; letter-spacing: 4px; }
+    .hero-badge { font-size: 10px; padding: 4px 12px; letter-spacing: 1.5px; }
+    .hero-sub { font-size: 11px; letter-spacing: 2px; }
+    .hero-norm { font-size: 10px; }
+
+    .app { padding: 16px 10px 48px; }
+    .card { padding: 18px 12px; border-radius: 14px; margin-bottom: 12px; }
+    .card-header { margin-bottom: 16px; gap: 10px; }
+    .card-icon { width: 32px; height: 32px; font-size: 14px; border-radius: 8px; }
+    .card-title { font-size: 17px; letter-spacing: 1.5px; }
+    .card-desc { font-size: 11px; }
+
+    .form-grid { grid-template-columns: 1fr; gap: 12px; }
+    select, input[type="number"] { font-size: 14px; padding: 10px 12px; }
+
+    /* Tabela compacta: 5 colunas sem rolagem lateral; unidade vai para a coluna da prova */
+    .so-desktop { display: none; }
+    .so-celular { display: inline; }
+    .metas-table { min-width: 0; font-size: 11px; }
+    .metas-table th, .metas-table td { padding: 9px 3px; }
+    .metas-table th.col-prova,
+    .metas-table td.oic-label {
+      min-width: 0;
+      width: 84px;
+      max-width: 84px;
+      padding-left: 8px;
+      font-size: 11px;
+      box-shadow: none;
+    }
+    .metas-table td.oic-label small {
+      display: block; font-weight: 400; font-size: 10px; color: var(--mist);
+      font-family: 'DM Mono', monospace; margin-top: 2px;
+    }
+
+    .btn-calc { font-size: 19px; padding: 15px; letter-spacing: 2px; }
+    .btn-reset { padding: 12px; font-size: 12px; }
+
+    .grade-number { font-size: 46px; }
+    .badge-apt { font-size: 22px; padding: 10px; }
+    .oic-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .oic-card { padding: 12px 8px; }
+    .oic-value { font-size: 18px; }
+    .oic-name { font-size: 9px; }
+
+    .norma-info-box { padding: 16px 14px; margin-top: 24px; }
+    .norma-grid { grid-template-columns: 1fr; gap: 10px; }
+  }
+
+/* ── PRÉVIA POR ITEM ── */
+.previa { font-family: 'DM Mono', monospace; font-size: 12px; margin-top: 8px; letter-spacing: 0.3px; }
+.previa:empty { display: none; }
+.previa-zero { color: #EF9A9A; }
+.previa-ok { color: #81C784; }
+.previa-pendente { color: var(--mist); font-family: 'DM Sans', sans-serif; }
+.previa-falta { font-size: 11px; color: var(--mist); margin-top: 2px; padding-left: 14px; }
+.previa-falta:empty { display: none; }
