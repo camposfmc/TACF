@@ -1,9 +1,11 @@
 /* Calculadora: liga o formulário do index.html aos módulos puros de cálculo e metas. */
-import { calcularTACF, normalizarEntrada, pontosItem, MAXIMOS, sec2MMSS, MENCOES } from './calculo-tacf.js';
-import { metasTACF, faixaItem, proximaFaixa } from './metas.js';
+import { calcularTACF, normalizarEntrada, pontosItem, sec2MMSS, MENCOES } from './calculo-tacf.js';
+import { metasTACF, proximaFaixa } from './metas.js';
+import { ROTULO_FAIXA, textoFalta, textoPrevia, avaliarFC } from './textos.js';
 
 const $ = id => document.getElementById(id);
 let tipoAerobico = 'corrida';
+let flexaoExecucao = 'padrao'; // 'padrao' | 'joelhos' (Art. 109: transição adaptativa feminina)
 let ultimoCalculo = null;
 
 /** Último cálculo exibido na tela (usado pelo fluxo de salvar). */
@@ -21,26 +23,20 @@ function setAerobico(tipo) {
 function verificarFC() {
   const fc = parseInt($('fc_repouso').value);
   $('alert-fc').style.display = fc && fc > 100 ? 'block' : 'none';
-  // A FC de repouso não pontua; a única regra da norma é o encaminhamento médico acima de 100 bpm (Art. 24).
   const el = $('previa-fc');
-  if (!Number.isFinite(fc)) {
-    el.textContent = '';
-    el.className = 'previa';
-  } else if (fc > 100) {
-    el.textContent = `→ ${fc} bpm · acima de 100: encaminhar ao médico antes dos testes (Art. 24)`;
-    el.className = 'previa previa-zero';
-  } else {
-    el.textContent = `→ ${fc} bpm · dentro do limite para os testes (≤ 100 bpm) · não pontua`;
-    el.className = 'previa previa-ok';
-  }
+  const avaliacao = avaliarFC(fc);
+  el.textContent = avaliacao ? avaliacao.texto : '';
+  el.className = !avaliacao ? 'previa' : avaliacao.alerta ? 'previa previa-zero' : 'previa previa-ok';
 }
 
-// Clique na área do cartão alterna a caixa. Cliques na própria caixa ou no rótulo já alternam
-// nativamente (e disparam 'change'); tratá-los aqui desfaria a marcação.
-function toggleTransicaoFem(ev) {
-  const chk = $('transicao_fem');
-  if (ev.target === chk || ev.target.closest('label')) return;
-  chk.checked = !chk.checked;
+// "Como fez a flexão?" (Art. 109): Padrão ou Joelhos apoiados. Só visível/aplicável ao feminino.
+function setFlexaoExecucao(modo) {
+  flexaoExecucao = modo;
+  $('btn-flexao-padrao').classList.toggle('active', modo === 'padrao');
+  $('btn-flexao-padrao').setAttribute('aria-pressed', String(modo === 'padrao'));
+  $('btn-flexao-joelhos').classList.toggle('active', modo === 'joelhos');
+  $('btn-flexao-joelhos').setAttribute('aria-pressed', String(modo === 'joelhos'));
+  $('aviso-transicao').classList.toggle('show', modo === 'joelhos');
   atualizarMetas();
 }
 
@@ -54,10 +50,10 @@ function atualizarMetas() {
   const sexo = $('sexo').value;
   const idade = parseInt($('idade').value);
   const estatura = parseFloat($('estatura').value);
-  const isTransicao = $('transicao_fem').checked;
+  const isTransicao = flexaoExecucao === 'joelhos';
 
   if (sexo === 'F') {
-    $('transicao-fem-container').style.display = 'flex';
+    $('grupo-flexao-execucao').style.display = 'block';
     $('t-cintura').innerText = 'OIC 05 · Cintura';
     if (isTransicao) {
       $('t-flex').innerText = 'OIC 06 · Flexão de Braço (Transição Art. 109)';
@@ -67,7 +63,7 @@ function atualizarMetas() {
       $('d-flex').innerText = 'Sem apoio dos joelhos · Conforme Art. 108 da NSCA 54-3/2026';
     }
   } else {
-    $('transicao-fem-container').style.display = 'none';
+    $('grupo-flexao-execucao').style.display = 'none';
     $('t-cintura').innerText = 'OIC 01 · Cintura';
     $('t-flex').innerText = 'OIC 02 · Flexão de Braços';
     $('d-flex').innerText = 'Repetições sem pausa para descanso (corpo estendido a 45º)';
@@ -95,7 +91,7 @@ function lerEntrada() {
     sexo,
     idade: parseInt($('idade').value),
     estatura: parseFloat($('estatura').value),
-    transicaoFem: $('transicao_fem').checked && sexo === 'F',
+    transicaoFem: flexaoExecucao === 'joelhos' && sexo === 'F',
     cintura: parseFloat($('cintura').value),
     flexao: parseInt($('flexao').value),
     abdominal: parseInt($('abdominal').value),
@@ -106,25 +102,12 @@ function lerEntrada() {
   return normalizarEntrada(e);
 }
 
-const ROTULO_FAIXA = { S: 'Satisfatório (S)', B: 'Bom (B)', MB: 'Muito Bom (MB)', E: 'Excelente (E)', MAX: 'Máximo' };
 const CLASSE_FAIXA = { S: 'c-s', B: 'c-b', MB: 'c-mb', E: 'c-e', MAX: 'c-max' };
 
 // Campos do formulário que alimentam cada item; o item só tem prévia se algum deles foi preenchido.
 function camposItem(item) {
   if (item !== 'aerobico') return [item];
   return tipoAerobico === 'corrida' ? ['corrida_m'] : ['marcha_min', 'marcha_seg'];
-}
-
-// Ex.: 'falta 1 rep para Bom (B)', 'reduzir 0.8 cm para o Máximo', 'reduzir 3:00 para ... — mínimo para APTO'.
-function textoFalta(p) {
-  if (!p) return '';
-  const alvo = p.faixa === 'MAX' ? 'o Máximo' : ROTULO_FAIXA[p.faixa];
-  let quanto;
-  if (p.unidade === 'min') quanto = `${Math.floor(p.falta / 60)}:${String(p.falta % 60).padStart(2, '0')}`;
-  else if (p.unidade === 'cm') quanto = `${p.falta.toFixed(1)} cm`;
-  else quanto = `${p.falta} ${p.unidade}`;
-  const verbo = p.sentido === '≤' ? 'reduzir' : (p.falta === 1 ? 'falta' : 'faltam');
-  return `${verbo} ${quanto} para ${alvo}` + (p.minimo ? ' — mínimo para APTO' : '');
 }
 
 /** Prévia dos pontos de cada item enquanto a pessoa digita (mesma conta do resultado final). */
@@ -143,10 +126,8 @@ function atualizarPrevias() {
       el.textContent = 'Informe idade e estatura para ver a prévia';
       el.className = 'previa previa-pendente';
     } else {
-      const pontos = pontosItem(item, e);
-      const faixa = faixaItem(pontos, MAXIMOS[item]);
-      el.textContent = `→ ${pontos.toFixed(1)} de ${MAXIMOS[item]} pts · ` +
-        (faixa ? ROTULO_FAIXA[faixa] : 'abaixo do mínimo (NÃO APTO)');
+      const { texto, faixa } = textoPrevia(item, pontosItem(item, e));
+      el.textContent = texto;
       el.className = 'previa ' + (faixa ? CLASSE_FAIXA[faixa] : 'previa-zero');
       falta.textContent = textoFalta(proximaFaixa(item, e));
     }
@@ -215,10 +196,8 @@ function calcular() {
 }
 
 function resetarFormulario() {
-  document.querySelectorAll('input').forEach(i => {
-    if (i.type === 'checkbox') i.checked = false;
-    else i.value = '';
-  });
+  document.querySelectorAll('input').forEach(i => { i.value = ''; });
+  setFlexaoExecucao('padrao');
   ultimoCalculo = null;
   $('resultado').style.display = 'none';
   $('card-metas').style.display = 'none';
@@ -231,8 +210,8 @@ function resetarFormulario() {
 $('sexo').addEventListener('change', atualizarMetas);
 $('idade').addEventListener('input', atualizarMetas);
 $('estatura').addEventListener('input', atualizarMetas);
-$('transicao-fem-container').addEventListener('click', toggleTransicaoFem);
-$('transicao_fem').addEventListener('change', atualizarMetas);
+$('btn-flexao-padrao').addEventListener('click', () => setFlexaoExecucao('padrao'));
+$('btn-flexao-joelhos').addEventListener('click', () => setFlexaoExecucao('joelhos'));
 $('fc_repouso').addEventListener('input', verificarFC);
 $('btn-corrida').addEventListener('click', () => setAerobico('corrida'));
 $('btn-marcha').addEventListener('click', () => setAerobico('marcha'));

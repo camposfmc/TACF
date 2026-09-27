@@ -141,3 +141,21 @@ export const MENCOES = {
   S:  { rotulo: 'Satisfatório (S)',   cor: '#FFD54F' },
   I:  { rotulo: 'Insatisfatório (I)', cor: '#EF5350' },
 };
+
+// Grau mínimo de cada menção (Art. 36): S a partir de 20 (APTO), B 40, MB 70, E 90.
+const LIMIAR_MENCAO = [['S', 20], ['B', 40], ['MB', 70], ['E', 90]];
+
+/**
+ * Próxima menção do grau final e quantos pontos faltam, arredondado para cima a 0,1.
+ * null na menção máxima (E) ou quando o NÃO APTO vem de OIC zerado (mais pontos não resolvem).
+ * @param {{apto:boolean, grau:number, pontos:Record<string, number>}} r resultado de calcularTACF
+ */
+export function proximaMencao(r) {
+  if (!r.apto && Object.values(r.pontos).some(p => p === 0)) return null;
+  const proxima = LIMIAR_MENCAO.find(([, limiar]) => r.grau < limiar);
+  if (!proxima) return null;
+  const [mencao, limiar] = proxima;
+  // Centésimos inteiros antes de arredondar: evita que 15.4000001 vire 15.5.
+  const centesimos = Math.round((limiar - r.grau) * 100);
+  return { mencao, limiar, falta: Math.ceil(centesimos / 10) / 10 };
+}

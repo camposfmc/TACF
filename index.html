@@ -46,14 +46,6 @@
         <input type="number" id="estatura" placeholder="Ex: 175" min="140" max="220">
       </div>
     </div>
-
-    <!-- Toggle de Transição Feminina (Art. 109) -->
-    <div id="transicao-fem-container" class="checkbox-container" style="display:none;">
-      <input type="checkbox" id="transicao_fem">
-      <label for="transicao_fem">
-        <strong>Regra de Transição Adaptativa (Art. 109):</strong> Militar recém-formada em curso de até 180 dias (execução com apoio dos joelhos por até 6 meses).
-      </label>
-    </div>
   </div>
 
   <!-- METAS AUTOMÁTICAS -->
@@ -123,6 +115,15 @@
       <div>
         <div class="card-title" id="t-flex">OIC 02 · Flexão de Braços</div>
         <div class="card-desc" id="d-flex">Repetições sem pausa para descanso (corpo estendido a 45º)</div>
+      </div>
+    </div>
+    <div id="grupo-flexao-execucao" style="display:none;">
+      <div class="aerobic-toggle" role="group" aria-label="Como fez a flexão?">
+        <button type="button" class="toggle-btn active" id="btn-flexao-padrao" aria-pressed="true">Padrão</button>
+        <button type="button" class="toggle-btn" id="btn-flexao-joelhos" aria-pressed="false">Joelhos apoiados</button>
+      </div>
+      <div class="alert" id="aviso-transicao">
+        Só vale para militar recém-formada em curso de até 180 dias, por até 6 meses após a formatura (Art. 109).
       </div>
     </div>
     <input type="number" id="flexao" placeholder="Nº de repetições completas">

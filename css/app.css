@@ -94,17 +94,11 @@
     font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-left: 8px;
     background: rgba(30,136,229,0.25); border: 1px solid rgba(30,136,229,0.5); color: #90CAF9;
   }
-  .checkbox-container {
-    display: flex; align-items: center; gap: 10px; margin-top: 14px; padding: 10px 14px;
-    background: rgba(255,255,255,0.04); border-radius: 10px; border: 1px dashed rgba(255,255,255,0.15);
-    cursor: pointer; user-select: none;
-  }
-  .checkbox-container input { width: 16px; height: 16px; cursor: pointer; }
-  .checkbox-container label { font-size: 12px; color: #E3F2FD; cursor: pointer; }
-
   .aerobic-toggle { display: flex; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 4px; gap: 4px; margin-bottom: 16px; }
   .toggle-btn { flex: 1; padding: 10px 12px; border: none; border-radius: 7px; background: transparent; color: var(--mist); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.25s; }
   .toggle-btn.active { background: var(--sky); color: var(--white); box-shadow: 0 2px 8px rgba(21,101,192,0.4); }
+  /* Escolha "Como fez a flexão?" (Art. 109): mesmo padrão visual do toggle Corrida/Marcha, com alvo de toque ≥ 44px. */
+  #grupo-flexao-execucao .toggle-btn { min-height: 44px; }
 
   .btn-calc {
     width: 100%; padding: 18px; border: none; border-radius: 12px;
