@@ -87,6 +87,7 @@
   select option { background: var(--navy-mid); color: var(--white); }
   input:focus, select:focus { border-color: var(--sky-bright); background: rgba(21,101,192,0.12); box-shadow: 0 0 0 3px rgba(30,136,229,0.15); }
   input::placeholder { color: rgba(255,255,255,0.25); }
+  input[aria-invalid="true"] { border-color: #EF5350; }
 
   /* ── BADGES & TOGGLES ── */
   .badge-norma {

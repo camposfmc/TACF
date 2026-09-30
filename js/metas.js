@@ -5,6 +5,7 @@ import {
   M_COLS, F_COLS, tabela1Transicao,
 } from './nsca-2026-tabelas.js';
 import { sec2MMSS, pontosItem, MAXIMOS } from './calculo-tacf.js';
+import { LIMITES_ENTRADA } from './limites.js';
 
 /** Pontos mínimos de cada menção (S, B, MB, E, Máx) por pontuação máxima do item. */
 export const LIMIARES = { 10: [2, 4, 7, 9, 10], 30: [6, 12, 21, 27, 30], 50: [10, 20, 35, 45, 50] };
@@ -120,4 +121,42 @@ export function proximaFaixa(item, e) {
     return { faixa: FAIXAS[i], falta, sentido: linha.sentido, unidade: linha.unidade, minimo: atual === null };
   }
   return null;
+}
+
+// Grau mínimo de cada alvo (Art. 36): Apto (S) 20, B 40, MB 70, E 90.
+const ALVOS_AEROBICO = [['S', 20], ['B', 40], ['MB', 70], ['E', 90]];
+
+/**
+ * TACF parcial (prova aeróbica em outro dia, art. 20 III): quanto a corrida ou a marcha precisa para
+ * cada menção, dado o que já foi feito. Varre os valores possíveis com o próprio pontosItem, então a
+ * meta é exatamente a da tabela (inclusive a interpolação da corrida).
+ * @param {{sexo:'M'|'F', idade:number, estatura:number, transicaoFem:boolean,
+ *   cintura:number, flexao:number, abdominal:number}} e
+ * @returns {{zerado:true, soma:number} | {zerado:false, soma:number,
+ *   alvos:{mencao:'S'|'B'|'MB'|'E', corridaM:number|null, marchaSeg:number|null}[]}}
+ * corridaM: menor distância (múltiplo de 10 m); marchaSeg: maior tempo (s); null = inalcançável.
+ * zerado: cintura, flexão ou abdominal com zero ponto → Não Apto qualquer que seja a prova aeróbica (Art. 30/33).
+ */
+export function metasAerobico(e) {
+  const p = { ...e, transicaoFem: !!e.transicaoFem && e.sexo === 'F' };
+  const cin = pontosItem('cintura', p);
+  const fle = pontosItem('flexao', p);
+  const abd = pontosItem('abdominal', p);
+  // Mesma ordem de soma de calcularTACF (cin + fle + abd + aer): o arredondamento em ponto flutuante coincide.
+  const soma = cin + fle + abd;
+  if (cin === 0 || fle === 0 || abd === 0) return { zerado: true, soma };
+  const alcanca = (aer, limiar) => aer > 0 && soma + aer >= limiar;
+  const { corridaM: limCorrida, marchaSeg: limMarcha } = LIMITES_ENTRADA;
+  const alvos = ALVOS_AEROBICO.map(([mencao, limiar]) => {
+    let corridaM = null;
+    for (let m = 10; m <= limCorrida.max; m += 10) {
+      if (alcanca(pontosItem('aerobico', { ...p, aerobicoModo: 'corrida', corridaM: m }), limiar)) { corridaM = m; break; }
+    }
+    let marchaSeg = null;
+    for (let s = limMarcha.max; s >= limMarcha.min; s--) {
+      if (alcanca(pontosItem('aerobico', { ...p, aerobicoModo: 'marcha', marchaSeg: s }), limiar)) { marchaSeg = s; break; }
+    }
+    return { mencao, corridaM, marchaSeg };
+  });
+  return { zerado: false, soma, alvos };
 }

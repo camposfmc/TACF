@@ -83,6 +83,15 @@ export function pontosItem(item, e) {
   }
 }
 
+/** Menção pela regra da norma (Art. 36): não apto → I; apto → E ≥ 90, MB ≥ 70, B ≥ 40, senão S. */
+export function mencaoDe(grau, apto) {
+  if (!apto) return 'I';
+  if (grau >= 90.0) return 'E';
+  if (grau >= 70.0) return 'MB';
+  if (grau >= 40.0) return 'B';
+  return 'S';
+}
+
 /**
  * @param {{sexo:'M'|'F', idade:number, estatura:number, transicaoFem:boolean,
  *   cintura:number, flexao:number, abdominal:number,
@@ -101,18 +110,15 @@ export function calcularTACF(e) {
   const zeraOIC = (cin === 0 || fle === 0 || abd === 0 || aer === 0);
   const apto = !zeraOIC && grau >= 20.0;
 
-  let mencao, motivoInapto = null;
+  const mencao = mencaoDe(grau, apto);
+  let motivoInapto = null;
   if (!apto) {
-    mencao = 'I';
     if (zeraOIC && grau >= 20) {
       motivoInapto = '⚠️ Avaliado como Não Apto devido a desempenho inferior ao mínimo estabelecido (zero pontos) em um ou mais OIC, conforme Art. 30 e 33 da NSCA 54-3/2026.';
     } else if (grau < 20) {
       motivoInapto = '⚠️ Grau Final inferior a 20,0 pontos (Art. 36, inciso II).';
     }
-  } else if (grau >= 90.0) mencao = 'E';
-  else if (grau >= 70.0) mencao = 'MB';
-  else if (grau >= 40.0) mencao = 'B';
-  else mencao = 'S';
+  }
 
   let destaque = null;
   if (apto && Math.round(grau * 10) === 1000) destaque = 'maximo';
