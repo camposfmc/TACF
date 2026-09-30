@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Calculadora do TACF pela NSCA 54-3/2026: pontos de cada prova, grau final, menção e metas por idade e sexo.">
 <title>TACF · NSCA 54-3/2026 · SEXTO COMANDO AÉREO REGIONAL</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/app.css">
@@ -18,7 +19,7 @@
   <p class="hero-norm" style="margin-top: 4px;">Sugestões para: camposfmc@fab.mil.br</p>
 </div>
 
-<div class="app">
+<main class="app">
 
   <!-- CARD 1: IDENTIFICAÇÃO -->
   <div class="card">
@@ -31,18 +32,18 @@
     </div>
     <div class="form-grid">
       <div class="form-group">
-        <label>Sexo</label>
+        <label for="sexo">Sexo</label>
         <select id="sexo">
           <option value="M">Masculino</option>
           <option value="F">Feminino</option>
         </select>
       </div>
       <div class="form-group">
-        <label>Idade (anos)</label>
+        <label for="idade">Idade (anos)</label>
         <input type="number" id="idade" placeholder="Ex: 28" min="18" max="75">
       </div>
       <div class="form-group">
-        <label>Estatura (cm)</label>
+        <label for="estatura">Estatura (cm)</label>
         <input type="number" id="estatura" placeholder="Ex: 175" min="140" max="220" step="0.1">
       </div>
     </div>
@@ -86,7 +87,7 @@
         <div class="card-desc">Item 1 do Quadro 2 e Art. 24 da NSCA 54-3/2026 (Decúbito dorsal por 10 min · Opcional)</div>
       </div>
     </div>
-    <input type="number" id="fc_repouso" placeholder="Frequência Cardíaca em bpm (Ex: 72) - Campo Opcional" min="30" max="220">
+    <input type="number" id="fc_repouso" aria-label="Frequência cardíaca de repouso (bpm)" placeholder="Frequência Cardíaca em bpm (Ex: 72) - Campo Opcional" min="30" max="220">
     <div class="previa" id="previa-fc" aria-live="polite"></div>
     <div id="alert-fc" class="alert-medico">
       🚨 <strong>ALERTA MÉDICO (Art. 24):</strong> FC de repouso superior a 100 batimentos por minuto. 
@@ -103,7 +104,7 @@
         <div class="card-desc">Ponto médio entre a última costela e a crista ilíaca (em decúbito frontal/pele descoberta)</div>
       </div>
     </div>
-    <input type="number" id="cintura" step="0.1" min="50" max="150" placeholder="Sua medida em cm (Ex: 85.3)">
+    <input type="number" id="cintura" aria-label="Circunferência da cintura (cm)" step="0.1" min="50" max="150" placeholder="Sua medida em cm (Ex: 85.3)">
     <div class="previa" id="previa-cintura" aria-live="polite"></div>
     <div class="previa-falta" id="falta-cintura"></div>
   </div>
@@ -126,7 +127,7 @@
         Só vale para militar recém-formada em curso de até 180 dias, por até 6 meses após a formatura (Art. 109).
       </div>
     </div>
-    <input type="number" id="flexao" min="0" max="150" step="1" placeholder="Nº de repetições completas">
+    <input type="number" id="flexao" aria-label="Flexão de braços (repetições)" min="0" max="150" step="1" placeholder="Nº de repetições completas">
     <div class="previa" id="previa-flexao" aria-live="polite"></div>
     <div class="previa-falta" id="falta-flexao"></div>
   </div>
@@ -140,7 +141,7 @@
         <div class="card-desc">Flexão do tronco sobre as coxas em 1 minuto (escápulas tocam o solo)</div>
       </div>
     </div>
-    <input type="number" id="abdominal" min="0" max="150" step="1" placeholder="Nº de repetições em 1 min">
+    <input type="number" id="abdominal" aria-label="Abdominal (repetições em 1 minuto)" min="0" max="150" step="1" placeholder="Nº de repetições em 1 min">
     <div class="previa" id="previa-abdominal" aria-live="polite"></div>
     <div class="previa-falta" id="falta-abdominal"></div>
   </div>
@@ -159,15 +160,15 @@
       <button class="toggle-btn" id="btn-marcha">🚶 Andar 4,8 km (Substitutivo - Art. 102)</button>
     </div>
     <div id="input-corrida">
-      <input type="number" id="corrida_m" min="1" max="5000" step="10" placeholder="Distância percorrida em metros (Ex: 2400, múltiplo de 10m)">
+      <input type="number" id="corrida_m" aria-label="Corrida de 12 minutos (metros)" min="1" max="5000" step="10" placeholder="Distância percorrida em metros (Ex: 2400, múltiplo de 10m)">
     </div>
     <div id="input-marcha" class="form-grid" style="display:none;">
       <div class="form-group">
-        <label>Minutos</label>
+        <label for="marcha_min">Minutos</label>
         <input type="number" id="marcha_min" placeholder="Ex: 42" min="10" max="120" step="1">
       </div>
       <div class="form-group">
-        <label>Segundos</label>
+        <label for="marcha_seg">Segundos</label>
         <input type="number" id="marcha_seg" placeholder="Ex: 30" min="0" max="59" step="1">
       </div>
     </div>
@@ -237,7 +238,7 @@
     </div>
   </div>
 
-</div>
+</main>
 
 <script type="module" src="js/ui-calculadora.js"></script>
 </body>
