@@ -249,6 +249,20 @@
   .norma-item { background: rgba(0,0,0,0.2); padding: 12px; border-radius: 10px; border-left: 3px solid var(--sky-bright); }
   .norma-item strong { color: #FFFFFF; font-size: 12px; display: block; margin-bottom: 4px; }
 
+  .app-tacf-box {
+    margin-top: 20px; background: rgba(194,65,12,0.10); border: 1px solid rgba(253,186,140,0.35);
+    border-radius: 16px; padding: 18px 24px; font-size: 13px; line-height: 1.6; color: #CFD8DC;
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px;
+  }
+  .app-tacf-box > div { flex: 1 1 280px; }
+  .app-tacf-box strong { color: #FFFFFF; display: block; font-size: 14px; }
+  .app-tacf-link {
+    display: inline-block; padding: 10px 16px; border-radius: 10px; background: #C2410C; color: #FFFFFF;
+    font-weight: 700; text-decoration: none; white-space: nowrap;
+  }
+  .app-tacf-link:hover, .app-tacf-link:focus-visible { background: #9A3412; }
+  .app-tacf-link:focus-visible { outline: 2px solid #FDBA8C; outline-offset: 2px; }
+
   /* ── VERSÕES DESKTOP/CELULAR DA TABELA DE METAS ── */
   .so-celular { display: none; }
 
@@ -301,6 +315,8 @@
 
     .norma-info-box { padding: 16px 14px; margin-top: 24px; }
     .norma-grid { grid-template-columns: 1fr; gap: 10px; }
+    .app-tacf-box { padding: 16px 14px; }
+    .app-tacf-link { white-space: normal; text-align: center; width: 100%; }
   }
 
 /* ── PRÉVIA POR ITEM ── */
